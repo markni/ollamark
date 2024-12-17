@@ -1,17 +1,21 @@
 {
   "manifest_version": 3,
   "name": "Bookmark Extension v2",
-  "version": "1.0.177",
+  "version": "1.0.248",
   "description": "A Chrome extension for managing bookmarks",
   "permissions": [
     "bookmarks",
     "tabs"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {},
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+  },
+  "host_permissions": [
+    "http://localhost:11434/*"
+  ]
 }

@@ -1,5 +1,7 @@
 /// <reference types="chrome"/>
 
+import { DEFAULT_SUBFOLDERS } from "@/constants";
+
 chrome.action.onClicked.addListener(() => {
   console.log("Extension icon clicked");
 
@@ -14,6 +16,22 @@ chrome.runtime.onInstalled.addListener((details) => {
 // Listen for messages from other parts of the extension
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   console.log("Received message:", message);
+
+  // Add new message handler for checking Ollama
+  if (message.action === "checkOllama") {
+    console.log("Checking Ollama status");
+    fetch("http://localhost:11434/api/version")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Ollama is online:", data);
+        sendResponse({ success: true, version: data.version });
+      })
+      .catch((error) => {
+        console.log("Ollama is offline or unreachable:", error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true; // Indicates that the response is sent asynchronously
+  }
 
   if (message.action === "getBookmarks") {
     chrome.bookmarks.getTree((bookmarkTreeNodes) => {
@@ -71,21 +89,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             }
 
             // Create subfolders with the new categories
-            const subfolders = [
-              "Technology",
-              "Code",
-              "Tutorial",
-              "Finance",
-              "Entertainment",
-              "Gaming",
-              "Videos",
-              "Food",
-              "Media",
-              "Documents",
-              "Shopping",
-            ];
             Promise.all(
-              subfolders.map((title) =>
+              DEFAULT_SUBFOLDERS.map((title: string) =>
                 chrome.bookmarks.create({
                   parentId: newFolder.id,
                   title: title,
