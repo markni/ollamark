@@ -25,17 +25,26 @@ const bumpManifestVersion = () => {
     enforce: "pre" as const,
     buildStart: () => {
       const manifestPath = resolve(__dirname, "public/manifest.json");
+      const packagePath = resolve(__dirname, "package.json");
+      
       const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
+      const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf-8"));
 
       // Split version into major.minor.patch
       const [major, minor, patch] = manifest.version.split(".").map(Number);
 
       // Bump patch version
-      manifest.version = `${major}.${minor}.${patch + 1}`;
+      const newVersion = `${major}.${minor}.${patch + 1}`;
+      
+      // Update both manifest.json and package.json
+      manifest.version = newVersion;
+      packageJson.version = newVersion;
 
-      // Write back to manifest.json
+      // Write back to both files
       fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-      console.log(`Bumped manifest version to ${manifest.version}`);
+      fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2));
+      
+      console.log(`Bumped version to ${newVersion} in manifest.json and package.json`);
     },
   };
 };
