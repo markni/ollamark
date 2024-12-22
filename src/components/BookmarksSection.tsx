@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FileTree } from "@/components/tree";
+import { useBookmarkContext } from "@/contexts/BookmarkContext";
 
 export function BookmarksSection() {
   const [bookmarks, setBookmarks] = useState<
     chrome.bookmarks.BookmarkTreeNode[]
   >([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [openFolders, setOpenFolders] = useState<string[]>([]);
+  const { openFolders } = useBookmarkContext();
 
   const refreshBookmarks = () => {
     setIsRefreshing(true);

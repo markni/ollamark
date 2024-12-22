@@ -3,15 +3,21 @@ import { FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ComingSoonFolders } from "./ComingSoonFolders";
 import { toast } from "sonner";
+import { useBookmarkContext } from "@/contexts/BookmarkContext";
 
 export function CreateFoldersSection() {
   const [isCreatingFolders, setIsCreatingFolders] = useState(false);
+  const { setOpenFolders } = useBookmarkContext();
 
   const createFolders = () => {
     setIsCreatingFolders(true);
     chrome.runtime.sendMessage({ action: "createFolders" }, (response) => {
       if (response.success) {
-        console.log("Folders created successfully");
+        console.log(
+          "Folders created successfully, the id is:",
+          response.folderId
+        );
+        setOpenFolders([response.folderId]);
         toast("All Folders created successfully", {
           action: {
             label: "OK",

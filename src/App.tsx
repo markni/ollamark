@@ -9,21 +9,23 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+  BookmarkProvider,
+} from "@/contexts/BookmarkContext";
 
 function App() {
   return (
+    <BookmarkProvider>
+      <AppContent />
+    </BookmarkProvider>
+  );
+}
+
+// New component to use the context
+function AppContent() {
+  return (
     <>
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel
-          defaultSize={15}
-          style={{ background: `hsl(var(--sidebar-background))` }}
-          className="min-h-screen"
-        >
-          <section className="p-4 ">
-            <BookmarksSection />
-          </section>
-        </ResizablePanel>
-        <ResizableHandle withHandle />
         <ResizablePanel>
           <div className="container mx-auto p-4 flex flex-col gap-4">
             <Separator className="my-4" />
@@ -37,6 +39,18 @@ function App() {
               <SortBookmarksSection />
             </section>
           </div>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel
+          defaultSize={15}
+          style={{ background: `hsl(var(--sidebar-background))` }}
+          className="min-h-screen"
+        >
+          <section className="p-4 ">
+            <BookmarksSection />
+          </section>
         </ResizablePanel>
       </ResizablePanelGroup>
 

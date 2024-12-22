@@ -36,16 +36,20 @@ function TreeItem({
 }) {
   const [isOpen, setIsOpen] = React.useState(() => {
     if (!openFolders) return false;
-    
-    const shouldBeOpen = openFolders.includes(item.id) || 
-      (item.children?.some(child => {
-        const hasOpenDescendant = (node: chrome.bookmarks.BookmarkTreeNode): boolean => {
+
+    const shouldBeOpen =
+      openFolders.includes(item.id) ||
+      (item.children?.some((child) => {
+        const hasOpenDescendant = (
+          node: chrome.bookmarks.BookmarkTreeNode
+        ): boolean => {
           if (openFolders.includes(node.id)) return true;
           return node.children?.some(hasOpenDescendant) ?? false;
         };
         return hasOpenDescendant(child);
-      }) ?? false);
-    
+      }) ??
+        false);
+
     return shouldBeOpen;
   });
 
@@ -55,14 +59,18 @@ function TreeItem({
       return;
     }
 
-    const shouldBeOpen = openFolders.includes(item.id) || 
-      (item.children?.some(child => {
-        const hasOpenDescendant = (node: chrome.bookmarks.BookmarkTreeNode): boolean => {
+    const shouldBeOpen =
+      openFolders.includes(item.id) ||
+      (item.children?.some((child) => {
+        const hasOpenDescendant = (
+          node: chrome.bookmarks.BookmarkTreeNode
+        ): boolean => {
           if (openFolders.includes(node.id)) return true;
           return node.children?.some(hasOpenDescendant) ?? false;
         };
         return hasOpenDescendant(child);
-      }) ?? false);
+      }) ??
+        false);
 
     setIsOpen(shouldBeOpen);
   }, [openFolders, item]);
@@ -83,7 +91,11 @@ function TreeItem({
               isOpen ? "rotate-90" : ""
             }`}
           />
-          <Folder className="mr-2 h-4 w-4 shrink-0 text-blue-500" />
+          <Folder
+            className={`mr-2 h-4 w-4 shrink-0 ${
+              isOpen ? "text-blue-500" : "text-gray-500"
+            }`}
+          />
           <span className="flex-grow text-left">{item.title}</span>
         </Button>
         {isOpen && item.children && item.children.length > 0 && (

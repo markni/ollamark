@@ -41,10 +41,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   }
 
   if (message.action === "createFolders") {
-    // Use the known ID for bookmark bar: "1"
     const bookmarkBarId = "1";
 
-    // Check if "test" folder exists
     chrome.bookmarks.search({ title: "test" }, (results) => {
       const testFolder = results.find(
         (bookmark) => bookmark.parentId === bookmarkBarId
@@ -52,7 +50,6 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
       if (testFolder) {
         console.log("Test folder already exists");
-        // Move existing folder to the front
         chrome.bookmarks.move(testFolder.id, { index: 0 }, () => {
           if (chrome.runtime.lastError) {
             console.error(
@@ -60,12 +57,11 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
               chrome.runtime.lastError
             );
           }
-          sendResponse({ success: true });
+          sendResponse({ success: true, folderId: testFolder.id });
         });
         return;
       }
 
-      // Create "test" folder
       chrome.bookmarks.create(
         { parentId: bookmarkBarId, title: "test" },
         (newFolder) => {
@@ -81,14 +77,11 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             return;
           }
 
-          // Move the folder to the front
           chrome.bookmarks.move(newFolder.id, { index: 0 }, () => {
             if (chrome.runtime.lastError) {
               console.error("Failed to move folder:", chrome.runtime.lastError);
-              // Continue anyway since the folder was created
             }
 
-            // Create subfolders with the new categories
             Promise.all(
               DEFAULT_SUBFOLDERS.map((title: string) =>
                 chrome.bookmarks.create({
@@ -99,7 +92,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             )
               .then(() => {
                 console.log("All folders created successfully");
-                sendResponse({ success: true });
+                sendResponse({ success: true, folderId: newFolder.id });
               })
               .catch((error) => {
                 console.error("Failed to create subfolders:", error);
@@ -112,6 +105,6 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         }
       );
     });
-    return true; // Indicates that the response is sent asynchronously
+    return true;
   }
 });
