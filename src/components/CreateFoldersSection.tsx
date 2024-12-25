@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ComingSoonFolders } from "./ComingSoonFolders";
 import { toast } from "sonner";
-import { useBookmarkContext } from "@/contexts/BookmarkContext";
+import { useBookmarkContext } from "@/contexts/useBookmarkContext";
 
 export function CreateFoldersSection() {
   const [isCreatingFolders, setIsCreatingFolders] = useState(false);
