@@ -18,10 +18,28 @@ function TreeView({
   items: chrome.bookmarks.BookmarkTreeNode[];
   openFolders?: string[];
 }) {
+  // Convert openFolders into a Set for O(1) lookup.
+  const openFoldersSet = React.useMemo(
+    () => new Set(openFolders ?? []),
+    [openFolders]
+  );
+
+  /**
+   * Recursively checks if the provided node or any of its descendants
+   * is in the openFolders set.
+   */
+  const isNodeOpen = React.useCallback(
+    function isNodeOpen(node: chrome.bookmarks.BookmarkTreeNode): boolean {
+      if (openFoldersSet.has(node.id)) return true;
+      return node.children?.some(isNodeOpen) ?? false;
+    },
+    [openFoldersSet]
+  );
+
   return (
     <ul className="space-y-1">
       {items.map((item) => (
-        <TreeItem key={item.id} item={item} openFolders={openFolders} />
+        <TreeItem key={item.id} item={item} isNodeOpen={isNodeOpen} />
       ))}
     </ul>
   );
@@ -29,54 +47,21 @@ function TreeView({
 
 function TreeItem({
   item,
-  openFolders,
+  isNodeOpen,
 }: {
   item: chrome.bookmarks.BookmarkTreeNode;
-  openFolders?: string[];
+  isNodeOpen: (node: chrome.bookmarks.BookmarkTreeNode) => boolean;
 }) {
-  const [isOpen, setIsOpen] = React.useState(() => {
-    if (!openFolders) return false;
+  // Initialize state based on whether this node (or a descendant) is open.
+  const [isOpen, setIsOpen] = React.useState(() => isNodeOpen(item));
 
-    const shouldBeOpen =
-      openFolders.includes(item.id) ||
-      (item.children?.some((child) => {
-        const hasOpenDescendant = (
-          node: chrome.bookmarks.BookmarkTreeNode
-        ): boolean => {
-          if (openFolders.includes(node.id)) return true;
-          return node.children?.some(hasOpenDescendant) ?? false;
-        };
-        return hasOpenDescendant(child);
-      }) ??
-        false);
-
-    return shouldBeOpen;
-  });
-
+  // Update whenever openFolders change.
   React.useEffect(() => {
-    if (!openFolders) {
-      setIsOpen(false);
-      return;
-    }
-
-    const shouldBeOpen =
-      openFolders.includes(item.id) ||
-      (item.children?.some((child) => {
-        const hasOpenDescendant = (
-          node: chrome.bookmarks.BookmarkTreeNode
-        ): boolean => {
-          if (openFolders.includes(node.id)) return true;
-          return node.children?.some(hasOpenDescendant) ?? false;
-        };
-        return hasOpenDescendant(child);
-      }) ??
-        false);
-
-    setIsOpen(shouldBeOpen);
-  }, [openFolders, item]);
+    setIsOpen(isNodeOpen(item));
+  }, [isNodeOpen, item]);
 
   const isFolder = !!item.children;
-  const toggleOpen = () => setIsOpen(!isOpen);
+  const toggleOpen = React.useCallback(() => setIsOpen((prev) => !prev), []);
 
   if (isFolder) {
     return (
@@ -101,7 +86,7 @@ function TreeItem({
         {isOpen && item.children && item.children.length > 0 && (
           <ul className="ml-6 mt-1 space-y-1">
             {item.children.map((child) => (
-              <TreeItem key={child.id} item={child} openFolders={openFolders} />
+              <TreeItem key={child.id} item={child} isNodeOpen={isNodeOpen} />
             ))}
           </ul>
         )}
@@ -109,6 +94,7 @@ function TreeItem({
     );
   }
 
+  // Bookmark link
   return (
     <li>
       <Button

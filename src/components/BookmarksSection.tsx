@@ -26,7 +26,7 @@ export function BookmarksSection() {
 
   useEffect(() => {
     refreshBookmarks();
-  }, []);
+  }, [openFolders]);
 
   return (
     <div>

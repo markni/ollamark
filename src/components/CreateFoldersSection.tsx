@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ComingSoonFolders } from "./ComingSoonFolders";
+import { CategoryConfigurator } from "./CategoryConfigurator";
 import { toast } from "sonner";
 import { useBookmarkContext } from "@/contexts/bookmark";
 
@@ -56,7 +56,7 @@ export function CreateFoldersSection() {
           Create
         </Button>
       </div>
-      <ComingSoonFolders />
+      <CategoryConfigurator />
       <p className="text-sm text-muted-foreground mt-2">
         Coming soon: allow you to customize the categories.
       </p>
