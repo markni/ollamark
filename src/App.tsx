@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/resizable";
 import {
   BookmarkProvider,
-} from "@/contexts/BookmarkContext";
+} from "@/contexts/bookmark";
 
 function App() {
   return (

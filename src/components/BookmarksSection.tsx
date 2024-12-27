@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FileTree } from "@/components/tree";
-import { useBookmarkContext } from "@/contexts/useBookmarkContext";
+import { useBookmarkContext } from "@/contexts/bookmark";
 
 export function BookmarksSection() {
   const [bookmarks, setBookmarks] = useState<

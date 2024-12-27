@@ -1,6 +1,5 @@
 import { useState, ReactNode } from "react";
-import { BookmarkContext } from "@/contexts/useBookmarkContext";
-
+import { BookmarkContext } from "./BookmarkContext";
 
 export function BookmarkProvider({ children }: { children: ReactNode }) {
   const [openFolders, setOpenFolders] = useState<string[]>([]);
