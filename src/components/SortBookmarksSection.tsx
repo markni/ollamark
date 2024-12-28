@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { ArrowUpDown, Check, X } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { SiOllama } from "@icons-pack/react-simple-icons";
 import { useBookmarkContext } from "@/contexts/bookmark";
 
 export function SortBookmarksSection() {
@@ -43,19 +42,6 @@ export function SortBookmarksSection() {
           Sort Bookmarks
         </Button>
       </div>
-      <div className="flex items-center gap-2">
-        <SiOllama />
-        <span>Ollama is {isOllamaOnline ? "online" : "offline"}</span>
-        {isOllamaOnline ? (
-          <Check className="h-4 w-4 text-green-500" />
-        ) : (
-          <X className="h-4 w-4 text-red-500" />
-        )}
-      </div>
-
-      <p className="text-sm text-muted-foreground mt-2">
-        Sort your bookmarks into categories using llm.
-      </p>
     </div>
   );
 }

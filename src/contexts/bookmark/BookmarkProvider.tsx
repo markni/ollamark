@@ -5,6 +5,8 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
   const [openFolders, setOpenFolders] = useState<string[]>([]);
   const [isOllamaOnline, setIsOllamaOnline] = useState(false);
   const [llmModel, setLlmModel] = useState("");
+  const [subFolders, setSubFolders] = useState<string[]>([]);
+  const [rootFolder, setRootFolder] = useState("");
   return (
     <BookmarkContext.Provider
       value={{
@@ -14,6 +16,10 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
         setIsOllamaOnline,
         llmModel,
         setLlmModel,
+        subFolders,
+        setSubFolders,
+        rootFolder,
+        setRootFolder,
       }}
     >
       {children}

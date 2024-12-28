@@ -2,7 +2,6 @@ import "./App.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Separator } from "@/components/ui/separator";
 import { BookmarksSection } from "@/components/BookmarksSection";
-import { CreateFoldersSection } from "@/components/CreateFoldersSection";
 import { SortBookmarksSection } from "@/components/SortBookmarksSection";
 import {
   ResizableHandle,
@@ -10,15 +9,10 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { BookmarkProvider } from "@/contexts/bookmark";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+
 import { OllamaAccordion } from "@/components/OllamaAccordion";
 import { LlmAccordion } from "@/components/LlmAccordion.tsx";
-
+import { CreateFoldersAccordion } from "@/components/CreateFoldersAccordion";
 function App() {
   return (
     <BookmarkProvider>
@@ -39,24 +33,13 @@ function AppContent() {
             </h1>
             <OllamaAccordion />
             <LlmAccordion />
-
-            <Accordion type="multiple">
-              <AccordionItem value="step-3">
-                <AccordionTrigger>3. Create folders</AccordionTrigger>
-                <AccordionContent>
-                  This is the content for step 3
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <CreateFoldersAccordion />
 
             <section>
               <SortBookmarksSection />
             </section>
 
             <Separator className="my-4" />
-            <section>
-              <CreateFoldersSection />
-            </section>
           </div>
         </ResizablePanel>
 
