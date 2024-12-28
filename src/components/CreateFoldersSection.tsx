@@ -39,7 +39,7 @@ export function CreateFoldersSection() {
   };
 
   return (
-    <div className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4 items-center">
+    <div className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-16 items-center">
       <div className="flex w-full max-w-sm items-center space-x-2">
         <Input
           type="text"

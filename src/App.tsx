@@ -9,9 +9,14 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { BookmarkProvider } from "@/contexts/bookmark";
 import {
-  BookmarkProvider,
-} from "@/contexts/bookmark";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { OllamaStepTrigger } from "@/components/OllamaStepTrigger";
 
 function App() {
   return (
@@ -28,15 +33,39 @@ function AppContent() {
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel>
           <div className="container mx-auto p-4 flex flex-col gap-4">
-            <Separator className="my-4" />
+            <Accordion type="multiple">
+              <AccordionItem value="step-1">
+                <AccordionTrigger>
+                  <OllamaStepTrigger />
+                </AccordionTrigger>
+                <AccordionContent>
+                  This is the content for step 1
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="step-2">
+                <AccordionTrigger>2. Select a llm model</AccordionTrigger>
+                <AccordionContent>
+                  This is the content for step 2
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="step-3">
+                <AccordionTrigger>3. Create folders</AccordionTrigger>
+                <AccordionContent>
+                  This is the content for step 3
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
 
-            <section>
-              <CreateFoldersSection />
-            </section>
-            <Separator className="my-4" />
-
+            <h1 className="text-4xl text-center my-16">
+              Let's clean up your messy bookmarks!
+            </h1>
             <section>
               <SortBookmarksSection />
+            </section>
+
+            <Separator className="my-4" />
+            <section>
+              <CreateFoldersSection />
             </section>
           </div>
         </ResizablePanel>

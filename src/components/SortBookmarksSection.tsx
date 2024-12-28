@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ArrowUpDown, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { SiOllama } from "@icons-pack/react-simple-icons";
+import { useBookmarkContext } from "@/contexts/bookmark";
 
 export function SortBookmarksSection() {
   const [isSorting, setIsSorting] = useState(false);
-  const [isOllamaOnline, setIsOllamaOnline] = useState(false);
+  const { isOllamaOnline } = useBookmarkContext();
 
   const sortBookmarks = () => {
     setIsSorting(true);
@@ -27,21 +28,6 @@ export function SortBookmarksSection() {
       }, 500);
     });
   };
-
-  const checkOllamaStatus = () => {
-    chrome.runtime.sendMessage({ action: "checkOllama" }, (response) => {
-      setIsOllamaOnline(response.success);
-      if (!response.success) {
-        console.log("Ollama is offline:", response.error);
-      }
-    });
-  };
-
-  useEffect(() => {
-    checkOllamaStatus();
-    const interval = setInterval(checkOllamaStatus, 60000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4 items-center">
