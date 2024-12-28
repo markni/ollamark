@@ -59,18 +59,27 @@ export function OllamaAccordion() {
             )}
           </div>
         </AccordionTrigger>
-        <AccordionContent>
+        <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
           {isOllamaOnline ? (
-            <div className="flex items-center gap-2">
+            <div>
               Your Ollama v.{ollamaVersion} is running and ready to use!{" "}
             </div>
           ) : (
             <div>
               Ollama is not running. Please make sure:
               <ul className="list-disc pl-6 mt-2">
-                <li>Ollama is installed on your system</li>
-                <li>The Ollama service is running</li>
-                <li>It's accessible at localhost:11434</li>
+                <li>
+                  <a
+                    href="https://ollama.com/download"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Ollama is installed
+                  </a>{" "}
+                  on your system
+                </li>
+                <li>The Ollama app / service is running</li>
               </ul>
             </div>
           )}

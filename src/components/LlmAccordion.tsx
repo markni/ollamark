@@ -7,41 +7,47 @@ import {
   AccordionTrigger,
   Accordion,
 } from "@/components/ui/accordion";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectContent,
+} from "@/components/ui/select";
 
 export function LlmAccordion() {
-  const { isOllamaOnline, setIsOllamaOnline } = useBookmarkContext();
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
-  const [ollamaVersion, setOllamaVersion] = useState<string | null>(null);
-  const [isOllamaChecked, setIsOllamaChecked] = useState(false);
+  const [isLlChecked, setIsOllamaChecked] = useState(false);
+  const { llmModel, setLlmModel } = useBookmarkContext();
+  const [llmModels, setLlmModels] = useState<string[]>([]);
 
-  const checkOllamaStatus = useCallback(() => {
-    chrome.runtime.sendMessage({ action: "checkOllama" }, (response) => {
+  const checkLlm = useCallback(() => {
+    chrome.runtime.sendMessage({ action: "checkLlm" }, (response) => {
       setIsOllamaChecked(true);
-      setIsOllamaOnline(response.success);
       if (!response.success) {
         console.log("Ollama is offline:", response.error);
       } else {
-        setOllamaVersion(response.version);
+        setLlmModels(response.llmModels);
       }
     });
-  }, [setIsOllamaOnline]);
+  }, []);
 
   useEffect(() => {
-    checkOllamaStatus();
-    const interval = setInterval(checkOllamaStatus, 1000);
+    checkLlm();
+    const interval = setInterval(checkLlm, 1000);
     return () => clearInterval(interval);
-  }, [checkOllamaStatus]);
+  }, [checkLlm]);
 
-  if (!isOllamaChecked) {
+  if (!isLlChecked) {
     return null;
   }
 
   return (
     <Accordion
       type="multiple"
-      value={isOllamaOnline ? accordionValue : ["step-1"]}
+      value={llmModel ? accordionValue : ["step-1"]}
       onValueChange={(value) => {
-        if (isOllamaOnline) {
+        if (llmModel) {
           setAccordionValue(value);
         }
       }}
@@ -51,28 +57,49 @@ export function LlmAccordion() {
           <div className="flex items-center gap-2">
             <Bot />
             2. Select a llm model
-            {isOllamaOnline ? (
+            {llmModel ? (
               <Check className="h-4 w-4 text-green-500 ml-2" />
             ) : (
               <X className="h-4 w-4 text-red-500 ml-2" />
             )}
           </div>
         </AccordionTrigger>
-        <AccordionContent>
-          {isOllamaOnline ? (
-            <div className="flex items-center gap-2">
-              Your Ollama v.{ollamaVersion} is running and ready to use!{" "}
+        <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
+          {llmModel ? (
+            <div className="flex items-center gap-4 mb-8 p-4 border rounded-lg bg-muted flex-col">
+              You have selected {llmModel} as your llm model.
             </div>
           ) : (
             <div>
-              Ollama is not running. Please make sure:
-              <ul className="list-disc pl-6 mt-2">
-                <li>Ollama is installed on your system</li>
-                <li>The Ollama service is running</li>
-                <li>It's accessible at localhost:11434</li>
-              </ul>
+              Pick a model you want to use to sort your bookmarks. If you don't
+              see any listed, make sure you{" "}
+              <a
+                className="text-blue-500 hover:underline"
+                href="https://ollama.com/search"
+                target="_blank"
+              >
+                install a model first.
+              </a>
             </div>
           )}
+
+          <div className="mt-4">
+            <Select
+              value={llmModel || undefined}
+              onValueChange={(value) => setLlmModel(value)}
+            >
+              <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
+                <SelectValue placeholder="Select a model" />
+              </SelectTrigger>
+              <SelectContent>
+                {llmModels.map((model) => (
+                  <SelectItem key={model} value={model}>
+                    {model}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

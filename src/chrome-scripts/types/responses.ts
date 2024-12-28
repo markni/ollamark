@@ -13,3 +13,9 @@ export interface FolderResponse {
   folderId?: string;
   error?: string;
 }
+
+export interface LlmResponse {
+  success: boolean;
+  llmModels?: string[];
+  error?: string;
+}

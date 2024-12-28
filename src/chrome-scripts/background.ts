@@ -3,6 +3,7 @@
 import { handleCheckOllama } from "./handlers/checkOllama";
 import { handleGetBookmarks } from "./handlers/getBookmarks";
 import { handleCreateFolders } from "./handlers/createFolders";
+import { handleCheckLlm } from "./handlers/checkLlm";
 
 chrome.action.onClicked.addListener(() => {
   console.log("Extension icon clicked");
@@ -21,6 +22,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   switch (message.action) {
     case "checkOllama":
       return handleCheckOllama(message, sendResponse);
+    case "checkLlm":
+      return handleCheckLlm(message, sendResponse);
     case "getBookmarks":
       return handleGetBookmarks(message, sendResponse);
     case "createFolders":
