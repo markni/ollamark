@@ -16,7 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { OllamaStepTrigger } from "@/components/OllamaStepTrigger";
+import { OllamaAccordionItem } from "@/components/OllamaAccordionItem.tsx";
 
 function App() {
   return (
@@ -33,15 +33,12 @@ function AppContent() {
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel>
           <div className="container mx-auto p-4 flex flex-col gap-4">
+            <h1 className="text-4xl text-center my-16">
+              Let's clean up your messy bookmarks!
+            </h1>
+            <OllamaAccordionItem />
+
             <Accordion type="multiple">
-              <AccordionItem value="step-1">
-                <AccordionTrigger>
-                  <OllamaStepTrigger />
-                </AccordionTrigger>
-                <AccordionContent>
-                  This is the content for step 1
-                </AccordionContent>
-              </AccordionItem>
               <AccordionItem value="step-2">
                 <AccordionTrigger>2. Select a llm model</AccordionTrigger>
                 <AccordionContent>
@@ -56,9 +53,6 @@ function AppContent() {
               </AccordionItem>
             </Accordion>
 
-            <h1 className="text-4xl text-center my-16">
-              Let's clean up your messy bookmarks!
-            </h1>
             <section>
               <SortBookmarksSection />
             </section>
