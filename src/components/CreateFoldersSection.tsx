@@ -57,9 +57,6 @@ export function CreateFoldersSection() {
         </Button>
       </div>
       <CategoryConfigurator />
-      <p className="text-sm text-muted-foreground mt-2">
-        Coming soon: allow you to customize the categories.
-      </p>
     </div>
   );
 }

@@ -6,16 +6,16 @@ import {
   DollarSign,
   Film,
   Gamepad2,
-  Youtube,
   Coffee,
   Image as ImageIcon,
   FileText,
   ShoppingBag,
   X,
   Plus,
+  CornerDownLeft,
+  FileVideo,
 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 const folderIcons = {
   Technology: Monitor,
@@ -24,7 +24,7 @@ const folderIcons = {
   Finance: DollarSign,
   Entertainment: Film,
   Gaming: Gamepad2,
-  Videos: Youtube,
+  Videos: FileVideo,
   Food: Coffee,
   Media: ImageIcon,
   Documents: FileText,
@@ -34,6 +34,7 @@ const folderIcons = {
 export function CategoryConfigurator() {
   const [subfolders, setSubfolders] = useState(DEFAULT_SUBFOLDERS);
   const [newFolder, setNewFolder] = useState("");
+  const [isAddingFolder, setIsAddingFolder] = useState(false);
 
   const removeFolder = (folderToRemove: string) => {
     setSubfolders(subfolders.filter((folder) => folder !== folderToRemove));
@@ -43,13 +44,21 @@ export function CategoryConfigurator() {
     if (newFolder.trim() && !subfolders.includes(newFolder.trim())) {
       setSubfolders([...subfolders, newFolder.trim()]);
       setNewFolder("");
+      setIsAddingFolder(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      addFolder();
     }
   };
 
   return (
     <div className="flex flex-wrap gap-2">
       {subfolders.map((folder) => {
-        const Icon = folderIcons[folder as keyof typeof folderIcons];
+        const Icon =
+          folderIcons[folder as keyof typeof folderIcons] || FileText;
         return (
           <div
             key={folder}
@@ -65,10 +74,28 @@ export function CategoryConfigurator() {
         );
       })}
       <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors">
-        <Plus
-          className="h-3 w-3 text-gray-500 hover:text-gray-700 cursor-pointer"
-          onClick={addFolder}
-        />
+        {isAddingFolder ? (
+          <>
+            <input
+              type="text"
+              value={newFolder}
+              onChange={(e) => setNewFolder(e.target.value.slice(0, 30))}
+              onKeyPress={handleKeyPress}
+              className="w-24 bg-transparent border-none outline-none text-xs"
+              placeholder="Category name"
+              autoFocus
+            />
+            <CornerDownLeft
+              className="h-3 w-3 text-gray-500 hover:text-gray-700 cursor-pointer"
+              onClick={addFolder}
+            />
+          </>
+        ) : (
+          <Plus
+            className="h-3 w-3 text-gray-500 hover:text-gray-700 cursor-pointer"
+            onClick={() => setIsAddingFolder(true)}
+          />
+        )}
       </div>
     </div>
   );

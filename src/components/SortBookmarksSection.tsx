@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ArrowUpDown, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { SiOllama } from "@icons-pack/react-simple-icons";
 
 export function SortBookmarksSection() {
   const [isSorting, setIsSorting] = useState(false);
@@ -57,6 +58,7 @@ export function SortBookmarksSection() {
         </Button>
       </div>
       <div className="flex items-center gap-2">
+        <SiOllama />
         <span>Ollama is {isOllamaOnline ? "online" : "offline"}</span>
         {isOllamaOnline ? (
           <Check className="h-4 w-4 text-green-500" />
