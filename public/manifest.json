@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Bookmark Extension v2",
-  "version": "1.0.699",
+  "version": "1.0.716",
   "description": "A Chrome extension for managing bookmarks",
   "permissions": [
     "bookmarks",

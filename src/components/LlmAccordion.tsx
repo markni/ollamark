@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, X, Bot } from "lucide-react";
 import { useBookmarkContext } from "@/contexts/bookmark";
 import {
   AccordionContent,
@@ -7,9 +7,8 @@ import {
   AccordionTrigger,
   Accordion,
 } from "@/components/ui/accordion";
-import { SiOllama } from "@icons-pack/react-simple-icons";
 
-export function OllamaAccordionItem() {
+export function LlmAccordion() {
   const { isOllamaOnline, setIsOllamaOnline } = useBookmarkContext();
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
   const [ollamaVersion, setOllamaVersion] = useState<string | null>(null);
@@ -50,8 +49,8 @@ export function OllamaAccordionItem() {
       <AccordionItem value="step-1">
         <AccordionTrigger>
           <div className="flex items-center gap-2">
-            <SiOllama />
-            1. Checking ollama availability
+            <Bot />
+            2. Select a llm model
             {isOllamaOnline ? (
               <Check className="h-4 w-4 text-green-500 ml-2" />
             ) : (

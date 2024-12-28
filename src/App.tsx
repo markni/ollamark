@@ -16,7 +16,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { OllamaAccordionItem } from "@/components/OllamaAccordionItem.tsx";
+import { OllamaAccordion } from "@/components/OllamaAccordion";
+import { LlmAccordion } from "@/components/LlmAccordion.tsx";
 
 function App() {
   return (
@@ -36,15 +37,10 @@ function AppContent() {
             <h1 className="text-4xl text-center my-16">
               Let's clean up your messy bookmarks!
             </h1>
-            <OllamaAccordionItem />
+            <OllamaAccordion />
+            <LlmAccordion />
 
             <Accordion type="multiple">
-              <AccordionItem value="step-2">
-                <AccordionTrigger>2. Select a llm model</AccordionTrigger>
-                <AccordionContent>
-                  This is the content for step 2
-                </AccordionContent>
-              </AccordionItem>
               <AccordionItem value="step-3">
                 <AccordionTrigger>3. Create folders</AccordionTrigger>
                 <AccordionContent>

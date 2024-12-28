@@ -3,4 +3,6 @@ export type BookmarkContextType = {
   setOpenFolders: (folders: string[]) => void;
   isOllamaOnline: boolean;
   setIsOllamaOnline: (online: boolean) => void;
+  llmModel: string;
+  setLlmModel: (model: string) => void;
 };
