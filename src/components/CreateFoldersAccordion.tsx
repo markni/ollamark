@@ -20,12 +20,16 @@ export function CreateFoldersAccordion() {
 
   const [isCreatingFolders, setIsCreatingFolders] = useState(false);
   const [folderName, setFolderName] = useState("");
-  const { setOpenFolders, setRootFolder } = useBookmarkContext();
+  const { setOpenFolders, setRootFolder, subFolders } = useBookmarkContext();
 
   const createFolders = () => {
     setIsCreatingFolders(true);
     chrome.runtime.sendMessage(
-      { action: "createFolders", folderName },
+      {
+        action: "createFolders",
+        folderName,
+        subfolders: subFolders,
+      },
       (response) => {
         if (response.success) {
           console.log(

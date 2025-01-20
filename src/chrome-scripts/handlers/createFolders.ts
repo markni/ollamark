@@ -2,11 +2,15 @@ import { DEFAULT_SUBFOLDERS } from "@/constants";
 import { FolderResponse } from "../types/responses";
 
 export const handleCreateFolders = (
-  message: { folderName?: string },
+  message: {
+    folderName?: string;
+    subfolders?: string[];
+  },
   sendResponse: (response: FolderResponse) => void
 ) => {
   const bookmarkBarId = "1";
   const folderName = message.folderName || "test";
+  const subfolders = message.subfolders || DEFAULT_SUBFOLDERS;
 
   chrome.bookmarks.search({ title: folderName }, (results) => {
     const testFolder = results.find(
@@ -48,7 +52,7 @@ export const handleCreateFolders = (
           }
 
           Promise.all(
-            DEFAULT_SUBFOLDERS.map((title: string) =>
+            subfolders.map((title: string) =>
               chrome.bookmarks.create({
                 parentId: newFolder.id,
                 title: title,

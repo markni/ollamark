@@ -82,7 +82,7 @@ export function CategoryConfigurator() {
               value={newFolder}
               onChange={(e) => setNewFolder(e.target.value.slice(0, 30))}
               onKeyPress={handleKeyPress}
-              className="w-24 bg-transparent border-none outline-none text-xs"
+              className="w-24 bg-transparent border-none outline-none text-xs text-gray-700"
               placeholder="Category name"
               autoFocus
             />
