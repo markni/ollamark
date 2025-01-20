@@ -57,6 +57,11 @@ export function LlmAccordion() {
           <div className="flex items-center gap-2">
             <Bot />
             2. Select a llm model
+            {llmModel && (
+              <span className="text-muted-foreground">
+                ({llmModel} selected)
+              </span>
+            )}
             {llmModel ? (
               <Check className="h-4 w-4 text-green-500 ml-2" />
             ) : (

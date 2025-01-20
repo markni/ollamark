@@ -1,11 +1,12 @@
 import { useState, ReactNode } from "react";
 import { BookmarkContext } from "./BookmarkContext";
+import { DEFAULT_SUBFOLDERS } from "@/constants";
 
 export function BookmarkProvider({ children }: { children: ReactNode }) {
   const [openFolders, setOpenFolders] = useState<string[]>([]);
   const [isOllamaOnline, setIsOllamaOnline] = useState(false);
   const [llmModel, setLlmModel] = useState("");
-  const [subFolders, setSubFolders] = useState<string[]>([]);
+  const [subFolders, setSubFolders] = useState<string[]>(DEFAULT_SUBFOLDERS);
   const [rootFolder, setRootFolder] = useState("");
   return (
     <BookmarkContext.Provider

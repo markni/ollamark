@@ -1,4 +1,3 @@
-import { DEFAULT_SUBFOLDERS } from "@/constants";
 import {
   Code,
   Monitor,
@@ -15,7 +14,8 @@ import {
   CornerDownLeft,
   FileVideo,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { BookmarkContext } from "@/contexts/bookmark/BookmarkContext";
 
 const folderIcons = {
   Technology: Monitor,
@@ -32,17 +32,18 @@ const folderIcons = {
 };
 
 export function CategoryConfigurator() {
-  const [subfolders, setSubfolders] = useState(DEFAULT_SUBFOLDERS);
+  const { subFolders, setSubFolders } = useContext(BookmarkContext);
+
   const [newFolder, setNewFolder] = useState("");
   const [isAddingFolder, setIsAddingFolder] = useState(false);
 
   const removeFolder = (folderToRemove: string) => {
-    setSubfolders(subfolders.filter((folder) => folder !== folderToRemove));
+    setSubFolders(subFolders.filter((folder) => folder !== folderToRemove));
   };
 
   const addFolder = () => {
-    if (newFolder.trim() && !subfolders.includes(newFolder.trim())) {
-      setSubfolders([...subfolders, newFolder.trim()]);
+    if (newFolder.trim() && !subFolders.includes(newFolder.trim())) {
+      setSubFolders([...subFolders, newFolder.trim()]);
       setNewFolder("");
       setIsAddingFolder(false);
     }
@@ -56,7 +57,7 @@ export function CategoryConfigurator() {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {subfolders.map((folder) => {
+      {subFolders.map((folder) => {
         const Icon =
           folderIcons[folder as keyof typeof folderIcons] || FileText;
         return (

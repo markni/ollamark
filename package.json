@@ -1,7 +1,7 @@
 {
   "name": "bookmark2",
   "private": true,
-  "version": "1.0.802",
+  "version": "1.0.817",
   "type": "module",
   "scripts": {
     "dev": "vite",
