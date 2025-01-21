@@ -14,8 +14,8 @@ import {
   CornerDownLeft,
   FileVideo,
 } from "lucide-react";
-import { useState, useContext } from "react";
-import { BookmarkContext } from "@/contexts/bookmark/BookmarkContext";
+import { useState } from "react";
+import { useBookmarkContext } from "@/contexts/bookmark/useBookmarkContext";
 
 const folderIcons = {
   Technology: Monitor,
@@ -32,7 +32,7 @@ const folderIcons = {
 };
 
 export function CategoryConfigurator() {
-  const { subFolders, setSubFolders } = useContext(BookmarkContext);
+  const { subFolders, setSubFolders } = useBookmarkContext();
 
   const [newFolder, setNewFolder] = useState("");
   const [isAddingFolder, setIsAddingFolder] = useState(false);

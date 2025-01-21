@@ -1,11 +1,13 @@
 import { LlmResponse } from "../types/responses";
 
 export const handleCheckLlm = (
-  _message: unknown,
+  message: { url?: string },
   sendResponse: (response: LlmResponse) => void
 ): boolean => {
+  const apiUrl = message.url || "http://localhost:11434";
+
   // Make a request to get available models
-  fetch("http://localhost:11434/api/tags", {
+  fetch(`${apiUrl}/api/tags`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

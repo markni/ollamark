@@ -11,3 +11,5 @@ export const DEFAULT_SUBFOLDERS = [
   "Documents",
   "Shopping",
 ].sort();
+
+export const DEFAULT_OLLAMA_URL = "http://localhost:11434";

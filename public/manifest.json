@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Bookmark Extension v2",
-  "version": "1.0.822",
-  "description": "A Chrome extension for managing bookmarks",
+  "name": "Ollamark",
+  "version": "1.0.969",
+  "description": "Ollama Powered AI Bookmark Sortor",
   "permissions": [
     "bookmarks",
-    "tabs"
+    "tabs",
+    "declarativeNetRequest"
   ],
   "background": {
     "service_worker": "background.js",
@@ -16,6 +17,7 @@
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "host_permissions": [
-    "http://localhost:11434/*"
+    "http://*/*",
+    "https://*/*"
   ]
 }

@@ -1,6 +1,8 @@
 import { useEffect, useCallback, useState } from "react";
-import { Check, X, Bot } from "lucide-react";
+import { Check, X, Bot, RefreshCw } from "lucide-react";
 import { useBookmarkContext } from "@/contexts/bookmark";
+import { Button } from "@/components/ui/button";
+
 import {
   AccordionContent,
   AccordionItem,
@@ -20,10 +22,15 @@ export function LlmAccordion() {
   const [isLlChecked, setIsOllamaChecked] = useState(false);
   const { llmModel, setLlmModel } = useBookmarkContext();
   const [llmModels, setLlmModels] = useState<string[]>([]);
+  const [isChecking, setIsChecking] = useState(false);
 
   const checkLlm = useCallback(() => {
+    setIsChecking(true);
     chrome.runtime.sendMessage({ action: "checkLlm" }, (response) => {
       setIsOllamaChecked(true);
+      setTimeout(() => {
+        setIsChecking(false);
+      }, 500);
       if (!response.success) {
         console.log("Ollama is offline:", response.error);
       } else {
@@ -34,8 +41,6 @@ export function LlmAccordion() {
 
   useEffect(() => {
     checkLlm();
-    const interval = setInterval(checkLlm, 1000);
-    return () => clearInterval(interval);
   }, [checkLlm]);
 
   if (!isLlChecked) {
@@ -88,7 +93,18 @@ export function LlmAccordion() {
             </div>
           )}
 
-          <div className="mt-4">
+          <div className="mt-4 flex gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={checkLlm}
+              title="Refresh LLM models"
+              disabled={isChecking}
+            >
+              <RefreshCw
+                className={`h-5 w-5 ${isChecking ? "animate-spin" : ""}`}
+              />
+            </Button>
             <Select
               value={llmModel || undefined}
               onValueChange={(value) => setLlmModel(value)}

@@ -6,26 +6,29 @@ import { useBookmarkContext } from "@/contexts/bookmark";
 
 export function SortBookmarksSection() {
   const [isSorting, setIsSorting] = useState(false);
-  const { isOllamaOnline } = useBookmarkContext();
+  const { isOllamaOnline, llmModel, rootFolderId } = useBookmarkContext();
 
   const sortBookmarks = () => {
     setIsSorting(true);
-    chrome.runtime.sendMessage({ action: "sortBookmarks" }, (response) => {
-      if (response.success) {
-        toast("Bookmarks sorted successfully", {
-          action: {
-            label: "OK",
-            onClick: () => console.log("Undo"),
-          },
-        });
-      } else {
-        console.error("Failed to sort bookmarks:", response.error);
-        toast.error("Failed to sort bookmarks");
+    chrome.runtime.sendMessage(
+      { action: "sortBookmarks", llmModel },
+      (response) => {
+        if (response.success) {
+          toast("Bookmarks sorted successfully", {
+            action: {
+              label: "OK",
+              onClick: () => console.log("Undo"),
+            },
+          });
+        } else {
+          console.error("Failed to sort bookmarks:", response.error);
+          toast.error("Failed to sort bookmarks");
+        }
+        setTimeout(() => {
+          setIsSorting(false);
+        }, 500);
       }
-      setTimeout(() => {
-        setIsSorting(false);
-      }, 500);
-    });
+    );
   };
 
   return (
@@ -33,7 +36,7 @@ export function SortBookmarksSection() {
       <div>
         <Button
           onClick={sortBookmarks}
-          disabled={isSorting || !isOllamaOnline}
+          disabled={isSorting || !isOllamaOnline || !llmModel || !rootFolderId}
           className="w-full sm:w-auto"
         >
           <ArrowUpDown

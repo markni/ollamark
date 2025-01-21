@@ -16,11 +16,11 @@ import { toast } from "sonner";
 
 export function CreateFoldersAccordion() {
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
-  const { rootFolder } = useBookmarkContext();
 
   const [isCreatingFolders, setIsCreatingFolders] = useState(false);
   const [folderName, setFolderName] = useState("");
-  const { setOpenFolders, setRootFolder, subFolders } = useBookmarkContext();
+  const { setOpenFolders, setRootFolderId, subFolders, rootFolderId } =
+    useBookmarkContext();
 
   const createFolders = () => {
     setIsCreatingFolders(true);
@@ -37,7 +37,7 @@ export function CreateFoldersAccordion() {
             response.folderId
           );
           setOpenFolders([response.folderId]);
-          setRootFolder(response.folderId);
+          setRootFolderId(response.folderId);
           toast("All Folders created successfully", {
             action: {
               label: "OK",
@@ -57,9 +57,9 @@ export function CreateFoldersAccordion() {
   return (
     <Accordion
       type="multiple"
-      value={rootFolder ? accordionValue : ["step-1"]}
+      value={rootFolderId ? accordionValue : ["step-1"]}
       onValueChange={(value) => {
-        if (rootFolder) {
+        if (rootFolderId) {
           setAccordionValue(value);
         }
       }}
@@ -69,7 +69,7 @@ export function CreateFoldersAccordion() {
           <div className="flex items-center gap-2">
             <Folder />
             3. Setup categories
-            {rootFolder ? (
+            {rootFolderId ? (
               <Check className="h-4 w-4 text-green-500 ml-2" />
             ) : (
               <X className="h-4 w-4 text-red-500 ml-2" />
@@ -77,9 +77,9 @@ export function CreateFoldersAccordion() {
           </div>
         </AccordionTrigger>
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
-          {rootFolder ? (
+          {rootFolderId ? (
             <div className="flex items-center gap-4 mb-8 p-4 border rounded-lg bg-muted flex-col">
-              You have selected {rootFolder} as your root folder.
+              You have selected {rootFolderId} as your root folder.
             </div>
           ) : (
             <div>

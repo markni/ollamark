@@ -1,11 +1,13 @@
 import { OllamaResponse } from "../types/responses";
 
 export const handleCheckOllama = (
-  _message: unknown,
+  message: { url?: string },
   sendResponse: (response: OllamaResponse) => void
 ) => {
   console.log("Checking Ollama status");
-  fetch("http://localhost:11434/api/version")
+  const apiUrl = message.url || "http://localhost:11434";
+
+  fetch(`${apiUrl}/api/version`)
     .then((response) => response.json())
     .then((data) => {
       console.log("Ollama is online:", data);

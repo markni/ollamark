@@ -6,10 +6,12 @@ export const BookmarkContext = createContext<BookmarkContextType>({
   setOpenFolders: () => {}, // Empty function placeholder
   isOllamaOnline: false,
   setIsOllamaOnline: () => {},
-  llmModel: '',
+  llmModel: "",
   setLlmModel: () => {},
   subFolders: [], // Or DEFAULT_SUBFOLDERS if you want
   setSubFolders: () => {},
-  rootFolder: '',
-  setRootFolder: () => {},
+  rootFolderId: "",
+  setRootFolderId: () => {},
+  ollamaUrl: "",
+  setOllamaUrl: () => {},
 });

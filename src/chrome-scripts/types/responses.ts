@@ -19,3 +19,8 @@ export interface LlmResponse {
   llmModels?: string[];
   error?: string;
 }
+
+export interface SortBookmarksResponse {
+  success: boolean;
+  error?: string;
+}
