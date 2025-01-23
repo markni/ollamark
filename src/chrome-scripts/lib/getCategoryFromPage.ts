@@ -30,45 +30,91 @@ export default async function getCategoryFromPage({
     required: ["category"],
   } as const;
 
-  // Prepare the request payload for the Ollama API
-  const payload = {
+  // Create the prompt content
+  const promptContent = `Categorize the following web page into exactly one of these categories: ${subfolders.join(
+    ", "
+  )}
+
+Web page details:
+Title: ${wpage.title}
+URL: ${wpage.pageUrl}${wpage.body ? `\nBody: ${wpage.body}` : ""}
+
+Think through this step by step:
+1. First, analyze the title and identify key topics or themes
+2. Then, examine the URL for additional context (like domain type or path structure)
+${
+  wpage.body
+    ? "3. Review the body content for supporting information\n4."
+    : "3."
+} Compare these themes against the available categories
+${
+  wpage.body ? "5" : "4"
+}. Select the most appropriate category that best matches the overall content
+
+Your response must be exactly one of the provided categories, no other values are allowed.`;
+
+  console.log("Prompt being used:", promptContent);
+
+  // First request with JSON schema
+  const payloadWithSchema = {
     model: llmModel,
     messages: [
       {
         role: "user",
-        content: `Categorize the following web page into exactly one of these categories: ${subfolders.join(
-          ", "
-        )}
-
-Web page details:
-Title: ${wpage.title}
-URL: ${wpage.pageUrl}
-Body: ${wpage.body || ""}
-
-Your response must be exactly one of the provided categories, no other values are allowed.`,
+        content: promptContent,
       },
     ],
     stream: false,
     format: schema,
   };
 
-  const fullUrl = `${ollamaUrl}/api/chat`;
-  const response = await fetch(fullUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  // Second request without JSON schema
+  const payloadWithoutSchema = {
+    model: llmModel,
+    messages: [
+      {
+        role: "user",
+        content: promptContent,
+      },
+    ],
+    stream: false,
+  };
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+  const fullUrl = `${ollamaUrl}/api/chat`;
+
+  // Make both requests
+  const [responseWithSchema, responseWithoutSchema] = await Promise.all([
+    fetch(fullUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payloadWithSchema),
+    }),
+    fetch(fullUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payloadWithoutSchema),
+    }),
+  ]);
+
+  if (!responseWithSchema.ok || !responseWithoutSchema.ok) {
+    throw new Error(
+      `HTTP error! Status: ${responseWithSchema.status} / ${responseWithoutSchema.status}`
+    );
   }
 
-  const data = await response.json();
+  const dataWithSchema = await responseWithSchema.json();
+  const dataWithoutSchema = await responseWithoutSchema.json();
+
+  console.log("Response with schema:", dataWithSchema);
+  console.log("Response without schema:", dataWithoutSchema);
+
   const content =
-    typeof data.message?.content === "string"
-      ? JSON.parse(data.message.content)
-      : data;
+    typeof dataWithSchema.message?.content === "string"
+      ? JSON.parse(dataWithSchema.message.content)
+      : dataWithSchema;
   return content.category;
 }

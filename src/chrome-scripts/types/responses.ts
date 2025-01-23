@@ -23,4 +23,9 @@ export interface LlmResponse {
 export interface SortBookmarksResponse {
   success: boolean;
   error?: string;
+  categorizedBookmarks?: Array<
+    chrome.bookmarks.BookmarkTreeNode & {
+      category: string;
+    }
+  >;
 }

@@ -13,6 +13,9 @@ import {
   Plus,
   CornerDownLeft,
   FileVideo,
+  MessageCircleQuestion,
+  Bike,
+  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 import { useBookmarkContext } from "@/contexts/bookmark/useBookmarkContext";
@@ -29,6 +32,9 @@ const folderIcons = {
   Media: ImageIcon,
   Documents: FileText,
   Shopping: ShoppingBag,
+  Other: MessageCircleQuestion,
+  Sports: Bike,
+  AI: Sparkles,
 };
 
 export function CategoryConfigurator() {

@@ -11,8 +11,9 @@ import {
 import { BookmarkProvider } from "@/contexts/bookmark";
 
 import { OllamaAccordion } from "@/components/OllamaAccordion";
-import { LlmAccordion } from "@/components/LlmAccordion.tsx";
+import { LlmAccordion } from "@/components/LlmAccordion";
 import { CreateFoldersAccordion } from "@/components/CreateFoldersAccordion";
+import Bookshelf from "@/components/Bookshelf";
 function App() {
   return (
     <BookmarkProvider>
@@ -28,9 +29,10 @@ function AppContent() {
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel>
           <div className="container mx-auto p-4 flex flex-col gap-4">
-            <h1 className="text-4xl text-center my-16">
+            {/* <h1 className="text-4xl text-center my-16">
               Let's clean up your messy bookmarks!
-            </h1>
+            </h1> */}
+            <Bookshelf className="mx-auto w-[500px]" />
             <OllamaAccordion />
             <LlmAccordion />
             <CreateFoldersAccordion />
