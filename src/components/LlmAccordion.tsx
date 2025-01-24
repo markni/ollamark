@@ -16,6 +16,7 @@ import {
   SelectItem,
   SelectContent,
 } from "@/components/ui/select";
+import Typewriter from "@/components/TypewriterText";
 
 export function LlmAccordion() {
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
@@ -76,11 +77,9 @@ export function LlmAccordion() {
         </AccordionTrigger>
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
           {llmModel ? (
-            <div className="flex items-center gap-4 mb-8 p-4 border rounded-lg bg-muted flex-col">
-              You have selected {llmModel} as your llm model.
-            </div>
+            <div>You have selected {llmModel} as your llm model.</div>
           ) : (
-            <div>
+            <Typewriter>
               Pick a model you want to use to sort your bookmarks. If you don't
               see any listed, make sure you{" "}
               <a
@@ -90,7 +89,7 @@ export function LlmAccordion() {
               >
                 install a model first.
               </a>
-            </div>
+            </Typewriter>
           )}
 
           <div className="mt-4 flex gap-2">
