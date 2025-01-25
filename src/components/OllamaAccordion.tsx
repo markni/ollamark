@@ -8,6 +8,7 @@ import {
   Accordion,
 } from "@/components/ui/accordion";
 import { SiOllama } from "@icons-pack/react-simple-icons";
+import TypewriterText from "@/components/TypewriterText";
 
 export function OllamaAccordion() {
   const { isOllamaOnline, setIsOllamaOnline, ollamaUrl, setOllamaUrl } =
@@ -17,6 +18,7 @@ export function OllamaAccordion() {
   const [isOllamaChecked, setIsOllamaChecked] = useState(false);
   const [inputUrl, setInputUrl] = useState(ollamaUrl);
   const [isValidUrl, setIsValidUrl] = useState(true);
+  const [hasTypingFinished, setHasTypingFinished] = useState(false);
 
   const checkOllamaStatus = useCallback(() => {
     chrome.runtime.sendMessage(
@@ -60,6 +62,10 @@ export function OllamaAccordion() {
     }
   };
 
+  const handleTypingFinish = useCallback(() => {
+    setHasTypingFinished(true);
+  }, []);
+
   if (!isOllamaChecked) {
     return null;
   }
@@ -78,12 +84,16 @@ export function OllamaAccordion() {
         <AccordionTrigger>
           <div className="flex items-center gap-2">
             <SiOllama />
-            1. Checking ollama availability
-            {isOllamaOnline ? (
-              <Check className="h-4 w-4 text-green-500 ml-2" />
-            ) : (
-              <X className="h-4 w-4 text-red-500 ml-2" />
-            )}
+            <TypewriterText onTypingFinish={handleTypingFinish}>
+              1. Checking ollama availability
+            </TypewriterText>
+
+            {hasTypingFinished &&
+              (isOllamaOnline ? (
+                <Check className="h-4 w-4 text-green-500 ml-2" />
+              ) : (
+                <X className="h-4 w-4 text-red-500 ml-2" />
+              ))}
           </div>
         </AccordionTrigger>
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">

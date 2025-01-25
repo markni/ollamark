@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useState, useEffect } from "react";
+import React, { ReactNode, useMemo, useState, useEffect, useRef } from "react";
 
 interface TypewriterTextProps {
   children: ReactNode; // can be text, <span>, <a>, etc.
@@ -23,47 +23,58 @@ export default function TypewriterText({
   useEffect(() => {
     const tokens = parseHTMLIntoTokens(htmlString);
 
-    let currentTokenIndex = 0;
-    let currentCharIndex = 0;
-    let currentOutput = "";
-
-    // Reset typing
+    // Reset local state
     setTypedHTML("");
     setIsTyping(true);
 
-    const intervalId = setInterval(() => {
-      // If we've used all tokens, we're done
-      if (currentTokenIndex >= tokens.length) {
-        clearInterval(intervalId);
-        setIsTyping(false);
-        onTypingFinish?.(); // Call the callback when typing finishes
-        return;
-      }
+    // Add abort controller for cleanup
+    const abortController = new AbortController();
 
-      const token = tokens[currentTokenIndex];
+    // Convert to async function for better cleanup
+    async function runTypingEffect() {
+      let currentTokenIndex = 0;
+      let currentCharIndex = 0;
+      let currentOutput = "";
 
-      if (token.type === "tag") {
-        // Insert entire tag at once
-        currentOutput += token.content;
-        currentTokenIndex++;
-        currentCharIndex = 0;
-      } else {
-        // Insert one character from text
-        const text = token.content;
-        currentOutput += text[currentCharIndex];
-        currentCharIndex++;
+      while (
+        currentTokenIndex < tokens.length &&
+        !abortController.signal.aborted
+      ) {
+        const token = tokens[currentTokenIndex];
 
-        if (currentCharIndex >= text.length) {
+        if (token.type === "tag") {
+          // Insert entire tag at once
+          currentOutput += token.content;
           currentTokenIndex++;
           currentCharIndex = 0;
+        } else {
+          // Insert one character from text
+          const text = token.content;
+          currentOutput += text[currentCharIndex];
+          currentCharIndex++;
+
+          if (currentCharIndex >= text.length) {
+            currentTokenIndex++;
+            currentCharIndex = 0;
+          }
         }
+
+        setTypedHTML(currentOutput);
+        await new Promise((resolve) => setTimeout(resolve, typingSpeed));
       }
 
-      setTypedHTML(currentOutput);
-    }, typingSpeed);
+      if (!abortController.signal.aborted) {
+        setIsTyping(false);
+        onTypingFinish?.();
+      }
+    }
 
-    return () => clearInterval(intervalId);
-  }, [htmlString, typingSpeed, onTypingFinish]); // Add to dependencies
+    runTypingEffect();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [htmlString, onTypingFinish, typingSpeed]); // Add all dependencies
 
   return (
     <span style={{ display: "inline-block", position: "relative" }}>
