@@ -20,15 +20,16 @@ import Typewriter from "@/components/TypewriterText";
 
 export function LlmAccordion() {
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
-  const [isLlChecked, setIsOllamaChecked] = useState(false);
-  const { llmModel, setLlmModel } = useBookmarkContext();
+  const [isLlmChecked, setIsLlmChecked] = useState(false);
+  const { llmModel, setLlmModel, isOllamaOnline } = useBookmarkContext();
   const [llmModels, setLlmModels] = useState<string[]>([]);
   const [isChecking, setIsChecking] = useState(false);
+  const [isTypingFinished, setIsTypingFinished] = useState(false);
 
   const checkLlm = useCallback(() => {
     setIsChecking(true);
     chrome.runtime.sendMessage({ action: "checkLlm" }, (response) => {
-      setIsOllamaChecked(true);
+      setIsLlmChecked(true);
       setTimeout(() => {
         setIsChecking(false);
       }, 500);
@@ -44,7 +45,7 @@ export function LlmAccordion() {
     checkLlm();
   }, [checkLlm]);
 
-  if (!isLlChecked) {
+  if (!isLlmChecked || !isOllamaOnline) {
     return null;
   }
 
@@ -62,22 +63,28 @@ export function LlmAccordion() {
         <AccordionTrigger>
           <div className="flex items-center gap-2">
             <Bot />
-            2. Select a llm model
-            {llmModel && (
-              <span className="text-muted-foreground">
-                ({llmModel} selected)
-              </span>
-            )}
-            {llmModel ? (
-              <Check className="h-4 w-4 text-green-500 ml-2" />
-            ) : (
-              <X className="h-4 w-4 text-red-500 ml-2" />
-            )}
+            <Typewriter onTypingFinish={() => setIsTypingFinished(true)}>
+              2. Select a llm model
+              {llmModel && (
+                <span className="text-muted-foreground">
+                  ({llmModel} selected)
+                </span>
+              )}
+            </Typewriter>
+
+            {isTypingFinished &&
+              (llmModel ? (
+                <Check className="h-4 w-4 text-green-500 ml-2" />
+              ) : (
+                <X className="h-4 w-4 text-red-500 ml-2" />
+              ))}
           </div>
         </AccordionTrigger>
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
           {llmModel ? (
-            <div>You have selected {llmModel} as your llm model.</div>
+            <Typewriter>
+              You have selected {llmModel} as your llm model.
+            </Typewriter>
           ) : (
             <Typewriter>
               Pick a model you want to use to sort your bookmarks. If you don't

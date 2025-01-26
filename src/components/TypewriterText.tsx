@@ -9,10 +9,16 @@ interface TypewriterTextProps {
 export default function TypewriterText({
   children,
   typingSpeed = 20,
-  onTypingFinish, // Add to destructuring
+  onTypingFinish,
 }: TypewriterTextProps) {
   const [typedHTML, setTypedHTML] = useState("");
   const [isTyping, setIsTyping] = useState(true);
+
+  // Store callback ref to avoid effect re-runs
+  const onTypingFinishRef = useRef(onTypingFinish);
+  useEffect(() => {
+    onTypingFinishRef.current = onTypingFinish;
+  }, [onTypingFinish]);
 
   // 1) Convert children to an HTML string only if children actually changed
   const htmlString = useMemo(() => {
@@ -65,7 +71,7 @@ export default function TypewriterText({
 
       if (!abortController.signal.aborted) {
         setIsTyping(false);
-        onTypingFinish?.();
+        onTypingFinishRef.current?.();
       }
     }
 
@@ -74,7 +80,7 @@ export default function TypewriterText({
     return () => {
       abortController.abort();
     };
-  }, [htmlString, onTypingFinish, typingSpeed]); // Add all dependencies
+  }, [htmlString, typingSpeed]);
 
   return (
     <span style={{ display: "inline-block", position: "relative" }}>

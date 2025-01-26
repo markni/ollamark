@@ -23,6 +23,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import TypewriterText from "@/components/TypewriterText";
 
 export function SortBookmarksSection() {
   const [isSorting, setIsSorting] = useState(false);
@@ -91,6 +92,18 @@ export function SortBookmarksSection() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const getDisabledReason = () => {
+    if (isSorting) return "Currently sorting bookmarks...";
+    if (!isOllamaOnline) return "Ollama is not running";
+    if (!llmModel) return "No LLM model selected";
+    if (!rootFolderId) return "No root folder selected";
+    return "";
+  };
+
+  const isButtonDisabled =
+    isSorting || !isOllamaOnline || !llmModel || !rootFolderId;
+  const disabledReason = getDisabledReason();
 
   return (
     <div className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
@@ -203,9 +216,8 @@ export function SortBookmarksSection() {
           <div className="flex justify-center gap-4">
             <Button
               onClick={sortBookmarks}
-              disabled={
-                isSorting || !isOllamaOnline || !llmModel || !rootFolderId
-              }
+              disabled={isButtonDisabled}
+              title={disabledReason}
               className="w-full sm:w-auto"
             >
               <ArrowUpDown
@@ -213,18 +225,23 @@ export function SortBookmarksSection() {
               />
               Resort Bookmarks
             </Button>
-            <Button className="w-full sm:w-auto" disabled={isSorting}>
+            <Button
+              className="w-full sm:w-auto"
+              disabled={isSorting}
+              title={
+                isSorting ? "Please wait while sorting is in progress" : ""
+              }
+            >
               Confirm Categories
             </Button>
           </div>
         </>
       ) : (
-        <div className="flex justify-center">
+        <div className="flex flex-col justify-center items-center gap-4">
           <Button
             onClick={sortBookmarks}
-            disabled={
-              isSorting || !isOllamaOnline || !llmModel || !rootFolderId
-            }
+            disabled={isButtonDisabled}
+            title={disabledReason}
             className="w-full sm:w-auto"
           >
             <ArrowUpDown
@@ -232,6 +249,11 @@ export function SortBookmarksSection() {
             />
             Sort Bookmarks
           </Button>
+          {isButtonDisabled && (
+            <TypewriterText>
+              You must complete the 3 steps setup before sorting bookmarks
+            </TypewriterText>
+          )}
         </div>
       )}
     </div>

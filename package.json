@@ -3,7 +3,7 @@
   "displayName": "Ollamark",
   "description": "Ollama Powered AI Bookmark Sortor",
   "private": true,
-  "version": "1.0.1173",
+  "version": "1.0.1209",
   "type": "module",
   "scripts": {
     "dev": "vite",

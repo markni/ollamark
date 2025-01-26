@@ -66,18 +66,12 @@ export function OllamaAccordion() {
     setHasTypingFinished(true);
   }, []);
 
-  if (!isOllamaChecked) {
-    return null;
-  }
-
   return (
     <Accordion
       type="multiple"
-      value={isOllamaOnline ? accordionValue : ["step-1"]}
+      value={!isOllamaOnline && isOllamaChecked ? ["step-1"] : accordionValue}
       onValueChange={(value) => {
-        if (isOllamaOnline) {
-          setAccordionValue(value);
-        }
+        setAccordionValue(value);
       }}
     >
       <AccordionItem value="step-1">
@@ -89,6 +83,7 @@ export function OllamaAccordion() {
             </TypewriterText>
 
             {hasTypingFinished &&
+              isOllamaChecked &&
               (isOllamaOnline ? (
                 <Check className="h-4 w-4 text-green-500 ml-2" />
               ) : (

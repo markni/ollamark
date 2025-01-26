@@ -13,14 +13,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CategoryConfigurator } from "./CategoryConfigurator";
 import { toast } from "sonner";
+import TypewriterText from "@/components/TypewriterText";
 
 export function CreateFoldersAccordion() {
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
 
   const [isCreatingFolders, setIsCreatingFolders] = useState(false);
-  const [folderName, setFolderName] = useState("");
-  const { setOpenFolders, setRootFolderId, subFolders, rootFolderId } =
-    useBookmarkContext();
+  const [folderName, setFolderName] = useState("Sorted Bookmarks");
+  const {
+    setOpenFolders,
+    setRootFolderId,
+    subFolders,
+    rootFolderId,
+    isOllamaOnline,
+    llmModel,
+  } = useBookmarkContext();
+  const [isTypingFinished, setIsTypingFinished] = useState(false);
+
+  if (!isOllamaOnline || !llmModel) {
+    return null;
+  }
 
   const createFolders = () => {
     setIsCreatingFolders(true);
@@ -68,24 +80,30 @@ export function CreateFoldersAccordion() {
         <AccordionTrigger>
           <div className="flex items-center gap-2">
             <Folder />
-            3. Setup categories
-            {rootFolderId ? (
-              <Check className="h-4 w-4 text-green-500 ml-2" />
-            ) : (
-              <X className="h-4 w-4 text-red-500 ml-2" />
-            )}
+            <TypewriterText onTypingFinish={() => setIsTypingFinished(true)}>
+              3. Setup categories!
+              {folderName ? ` (created folder "${folderName}")` : ""}
+            </TypewriterText>
+            {isTypingFinished &&
+              (rootFolderId ? (
+                <Check className="h-4 w-4 text-green-500 ml-2" />
+              ) : (
+                <X className="h-4 w-4 text-red-500 ml-2" />
+              ))}
           </div>
         </AccordionTrigger>
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
           {rootFolderId ? (
             <div className="flex items-center gap-4 mb-8 p-4 border rounded-lg bg-muted flex-col">
-              You have selected {rootFolderId} as your root folder.
+              <TypewriterText>
+                You have selected {rootFolderId} as your root folder.
+              </TypewriterText>
             </div>
           ) : (
-            <div>
-              Let's create your folders first, your bookmarks will be sorted
-              into these categories inside the root folder.
-            </div>
+            <TypewriterText>
+              Let's create your category folders first, your bookmarks will be
+              sorted into these categories inside the root folder.
+            </TypewriterText>
           )}
 
           <div className="flex w-full max-w-sm items-center space-x-2">
@@ -104,10 +122,10 @@ export function CreateFoldersAccordion() {
               Create
             </Button>
           </div>
-          <p>
+          <TypewriterText>
             You can also customize the categories your bookmark will be sort
             into.
-          </p>
+          </TypewriterText>
           <CategoryConfigurator />
         </AccordionContent>
       </AccordionItem>
