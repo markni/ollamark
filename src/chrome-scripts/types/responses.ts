@@ -26,7 +26,7 @@ export interface SortBookmarksResponse {
   error?: string;
   categorizedBookmarks?: Array<
     chrome.bookmarks.BookmarkTreeNode & {
-      category: string;
+      category?: string;
     }
   >;
 }

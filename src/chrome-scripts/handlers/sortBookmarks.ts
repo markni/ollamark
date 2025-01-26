@@ -11,24 +11,27 @@ export const handleSortBookmarks = (
     try {
       const MAX_BOOKMARKS = 9999; // Debug limit
       const bookmarks = await loadAllBookmarks();
-      const results = [];
+      // Pre-fill results with all bookmarks, initially with null categories
+      const results: (chrome.bookmarks.BookmarkTreeNode & {
+        category?: string;
+      })[] = bookmarks.slice(0, MAX_BOOKMARKS);
 
-      console.log(
-        `Processing ${Math.min(bookmarks.length, MAX_BOOKMARKS)} bookmarks...`
-      );
+      console.log(`Processing ${results.length} bookmarks...`);
 
-      for (let i = 0; i < Math.min(bookmarks.length, MAX_BOOKMARKS); i++) {
-        const bookmark = bookmarks[i];
+      chrome.runtime.sendMessage({
+        type: "sortingInProgress",
+        bookmarksSortingInprogress: results,
+      });
+
+      for (let i = 0; i < results.length; i++) {
+        const bookmark = results[i];
         if (!bookmark?.url) {
           console.log(`Skipping bookmark ${i + 1}: No URL`);
           continue;
         }
 
         console.log(
-          `Processing bookmark ${i + 1}/${Math.min(
-            bookmarks.length,
-            MAX_BOOKMARKS
-          )}: ${bookmark.title}`
+          `Processing bookmark ${i + 1}/${results.length}: ${bookmark.title}`
         );
 
         const category = await getCategoryFromPage({
@@ -46,12 +49,16 @@ export const handleSortBookmarks = (
           continue;
         }
 
-        results.push({
-          ...bookmark,
-          category: category,
-        });
+        // Update the category in the existing results array
+        results[i].category = category;
 
         console.log(`Categorized ${bookmark.title} as: ${category}`);
+
+        // Send progress update
+        chrome.runtime.sendMessage({
+          type: "sortingInProgress",
+          bookmarksSortingInprogress: results,
+        });
       }
 
       console.log("Final categorized bookmarks:", results);

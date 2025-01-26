@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { CategoryConfigurator } from "./CategoryConfigurator";
 import { toast } from "sonner";
 import TypewriterText from "@/components/TypewriterText";
+import { Label } from "@/components/ui/label";
 
 export function CreateFoldersAccordion() {
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
@@ -100,23 +101,36 @@ export function CreateFoldersAccordion() {
             </p>
           )}
 
-          <div className="flex w-full max-w-sm items-center space-x-2">
-            <Input
-              type="text"
-              placeholder="Root folder name"
-              value={folderName}
-              onChange={(e) => setFolderName(e.target.value)}
-            />
-            <Button onClick={createFolders} disabled={isCreatingFolders}>
-              <FolderPlus
-                className={`mr-2 h-4 w-4 ${
-                  isCreatingFolders ? "animate-spin" : ""
-                }`}
-              />
-              Create
-            </Button>
+          <div className="flex w-full max-w-sm space-x-2 mt-4">
+            <div className="grid w-full gap-1.5">
+              <Label htmlFor="rootFolderName" className="text-xs ">
+                Root folder name
+              </Label>
+              <div className="flex space-x-2">
+                <Input
+                  id="rootFolderName"
+                  type="text"
+                  placeholder="Root folder name"
+                  value={folderName}
+                  onChange={(e) => setFolderName(e.target.value)}
+                />
+                <Button
+                  className="bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
+                  onClick={createFolders}
+                  disabled={isCreatingFolders}
+                >
+                  <FolderPlus
+                    className={`mr-2 h-4 w-4 ${
+                      isCreatingFolders ? "animate-spin" : ""
+                    }`}
+                  />
+                  Create root folder
+                </Button>
+              </div>
+            </div>
           </div>
-          <p>
+
+          <p className="mt-4">
             You can also customize the categories your bookmark will be sort
             into.
           </p>
