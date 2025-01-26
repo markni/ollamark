@@ -13,6 +13,7 @@ export default function TypewriterText({
 }: TypewriterTextProps) {
   const [typedHTML, setTypedHTML] = useState("");
   const [isTyping, setIsTyping] = useState(true);
+  const hasAnimatedRef = useRef(false); // New ref to track initial animation
 
   // Store callback ref to avoid effect re-runs
   const onTypingFinishRef = useRef(onTypingFinish);
@@ -27,6 +28,13 @@ export default function TypewriterText({
 
   // 2) On mount (or when htmlString changes), parse & type it out
   useEffect(() => {
+    // If we've already animated once, just show the new content immediately
+    if (hasAnimatedRef.current) {
+      setTypedHTML(htmlString);
+      setIsTyping(false);
+      return;
+    }
+
     const tokens = parseHTMLIntoTokens(htmlString);
 
     // Reset local state
@@ -76,6 +84,7 @@ export default function TypewriterText({
     }
 
     runTypingEffect();
+    hasAnimatedRef.current = true; // Mark that we've done the initial animation
 
     return () => {
       abortController.abort();

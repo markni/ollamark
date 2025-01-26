@@ -8,6 +8,7 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
   const [llmModel, setLlmModel] = useState("");
   const [subFolders, setSubFolders] = useState<string[]>(DEFAULT_SUBFOLDERS);
   const [rootFolderId, setRootFolderId] = useState("");
+  const [rootFolderName, setRootFolderName] = useState("");
   const [ollamaUrl, setOllamaUrl] = useState("http://localhost:11434");
   return (
     <BookmarkContext.Provider
@@ -24,6 +25,8 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
         setRootFolderId,
         ollamaUrl,
         setOllamaUrl,
+        rootFolderName,
+        setRootFolderName,
       }}
     >
       {children}

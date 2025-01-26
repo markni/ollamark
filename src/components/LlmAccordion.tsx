@@ -82,11 +82,9 @@ export function LlmAccordion() {
         </AccordionTrigger>
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
           {llmModel ? (
-            <Typewriter>
-              You have selected {llmModel} as your llm model.
-            </Typewriter>
+            <p>You have selected {llmModel} as your llm model.</p>
           ) : (
-            <Typewriter>
+            <p>
               Pick a model you want to use to sort your bookmarks. If you don't
               see any listed, make sure you{" "}
               <a
@@ -96,7 +94,7 @@ export function LlmAccordion() {
               >
                 install a model first.
               </a>
-            </Typewriter>
+            </p>
           )}
 
           <div className="mt-4 flex gap-2">

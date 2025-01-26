@@ -25,14 +25,11 @@ export function CreateFoldersAccordion() {
     setRootFolderId,
     subFolders,
     rootFolderId,
-    isOllamaOnline,
-    llmModel,
+
+    rootFolderName,
+    setRootFolderName,
   } = useBookmarkContext();
   const [isTypingFinished, setIsTypingFinished] = useState(false);
-
-  if (!isOllamaOnline || !llmModel) {
-    return null;
-  }
 
   const createFolders = () => {
     setIsCreatingFolders(true);
@@ -50,6 +47,7 @@ export function CreateFoldersAccordion() {
           );
           setOpenFolders([response.folderId]);
           setRootFolderId(response.folderId);
+          setRootFolderName(response.folderName);
           toast("All Folders created successfully", {
             action: {
               label: "OK",
@@ -69,7 +67,7 @@ export function CreateFoldersAccordion() {
   return (
     <Accordion
       type="multiple"
-      value={rootFolderId ? accordionValue : ["step-1"]}
+      value={rootFolderId && isTypingFinished ? accordionValue : ["step-1"]}
       onValueChange={(value) => {
         if (rootFolderId) {
           setAccordionValue(value);
@@ -81,8 +79,8 @@ export function CreateFoldersAccordion() {
           <div className="flex items-center gap-2">
             <Folder />
             <TypewriterText onTypingFinish={() => setIsTypingFinished(true)}>
-              3. Setup categories!
-              {folderName ? ` (created folder "${folderName}")` : ""}
+              3. Setup categories
+              {rootFolderName ? ` (created folder "${rootFolderName}")` : ""}
             </TypewriterText>
             {isTypingFinished &&
               (rootFolderId ? (
@@ -94,16 +92,12 @@ export function CreateFoldersAccordion() {
         </AccordionTrigger>
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
           {rootFolderId ? (
-            <div className="flex items-center gap-4 mb-8 p-4 border rounded-lg bg-muted flex-col">
-              <TypewriterText>
-                You have selected {rootFolderId} as your root folder.
-              </TypewriterText>
-            </div>
+            <p>You have selected {rootFolderId} as your root folder.</p>
           ) : (
-            <TypewriterText>
+            <p>
               Let's create your category folders first, your bookmarks will be
               sorted into these categories inside the root folder.
-            </TypewriterText>
+            </p>
           )}
 
           <div className="flex w-full max-w-sm items-center space-x-2">
@@ -122,10 +116,10 @@ export function CreateFoldersAccordion() {
               Create
             </Button>
           </div>
-          <TypewriterText>
+          <p>
             You can also customize the categories your bookmark will be sort
             into.
-          </TypewriterText>
+          </p>
           <CategoryConfigurator />
         </AccordionContent>
       </AccordionItem>

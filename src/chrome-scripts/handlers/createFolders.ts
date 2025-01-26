@@ -61,7 +61,11 @@ export const handleCreateFolders = (
           )
             .then(() => {
               console.log("All folders created successfully");
-              sendResponse({ success: true, folderId: newFolder.id });
+              sendResponse({
+                success: true,
+                folderId: newFolder.id,
+                folderName: newFolder.title,
+              });
             })
             .catch((error) => {
               console.error("Failed to create subfolders:", error);

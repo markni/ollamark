@@ -250,9 +250,7 @@ export function SortBookmarksSection() {
             Sort Bookmarks
           </Button>
           {isButtonDisabled && (
-            <TypewriterText>
-              You must complete the 3 steps setup before sorting bookmarks
-            </TypewriterText>
+            <p>You must complete the 3 steps setup before sorting bookmarks</p>
           )}
         </div>
       )}

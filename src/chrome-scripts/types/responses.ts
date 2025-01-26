@@ -11,6 +11,7 @@ export interface BookmarkResponse {
 export interface FolderResponse {
   success: boolean;
   folderId?: string;
+  folderName?: string;
   error?: string;
 }
 

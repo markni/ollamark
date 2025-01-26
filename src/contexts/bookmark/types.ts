@@ -11,4 +11,6 @@ export type BookmarkContextType = {
   setRootFolderId: (folder: string) => void;
   ollamaUrl: string;
   setOllamaUrl: (url: string) => void;
+  rootFolderName: string;
+  setRootFolderName: (name: string) => void;
 };

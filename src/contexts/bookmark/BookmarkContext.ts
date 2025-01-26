@@ -12,6 +12,8 @@ export const BookmarkContext = createContext<BookmarkContextType>({
   setSubFolders: () => {},
   rootFolderId: "",
   setRootFolderId: () => {},
+  rootFolderName: "",
+  setRootFolderName: () => {},
   ollamaUrl: "",
   setOllamaUrl: () => {},
 });
