@@ -76,7 +76,7 @@ export function OllamaAccordion() {
     >
       <AccordionItem value="step-1">
         <AccordionTrigger>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-md">
             <SiOllama />
             <TypewriterText onTypingFinish={handleTypingFinish}>
               1. Checking ollama availability

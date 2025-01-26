@@ -49,11 +49,12 @@ export function CreateFoldersAccordion() {
           setOpenFolders([response.folderId]);
           setRootFolderId(response.folderId);
           setRootFolderName(response.folderName);
-          toast("All Folders created successfully", {
+          toast.success("All Folders created successfully", {
             action: {
               label: "OK",
-              onClick: () => console.log("Undo"),
+              onClick: () => toast.dismiss(),
             },
+            position: "bottom-left",
           });
         } else {
           console.error("Failed to create folders:", response.error);
@@ -77,7 +78,7 @@ export function CreateFoldersAccordion() {
     >
       <AccordionItem value="step-1">
         <AccordionTrigger>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-md">
             <Folder />
             <TypewriterText onTypingFinish={() => setIsTypingFinished(true)}>
               3. Setup categories

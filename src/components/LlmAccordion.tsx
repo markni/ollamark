@@ -16,7 +16,7 @@ import {
   SelectItem,
   SelectContent,
 } from "@/components/ui/select";
-import Typewriter from "@/components/TypewriterText";
+import TypewriterText from "@/components/TypewriterText";
 
 export function LlmAccordion() {
   const [accordionValue, setAccordionValue] = useState<string[]>([]);
@@ -63,14 +63,14 @@ export function LlmAccordion() {
         <AccordionTrigger>
           <div className="flex items-center gap-2">
             <Bot />
-            <Typewriter onTypingFinish={() => setIsTypingFinished(true)}>
+            <TypewriterText onTypingFinish={() => setIsTypingFinished(true)}>
               2. Select a llm model
               {llmModel && (
                 <span className="text-muted-foreground">
                   ({llmModel} selected)
                 </span>
               )}
-            </Typewriter>
+            </TypewriterText>
 
             {isTypingFinished &&
               (llmModel ? (

@@ -59,20 +59,13 @@ export function SortBookmarksSection() {
       (response: SortBookmarksResponse) => {
         if (response.success && response.categorizedBookmarks) {
           setOriginalSortedBookmarks(response.categorizedBookmarks || []);
-          // setSortedBookmarks((prev) =>
-          //   (response.categorizedBookmarks || []).map((newBm, index) => {
-          //     const existing = prev[index];
-          //     return existing?.category === newBm.category
-          //       ? newBm
-          //       : existing || newBm;
-          //   })
-          // );
-          toast(
+          toast.success(
             "Bookmarks pre-sorted successfully, please review the results",
             {
+              position: "bottom-left",
               action: {
-                label: "Reset Categories",
-                onClick: () => setSortedBookmarks(originalSortedBookmarks),
+                label: "OK",
+                onClick: () => toast.dismiss(),
               },
             }
           );
