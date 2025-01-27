@@ -29,8 +29,13 @@ export function CreateFoldersAccordion() {
 
     rootFolderName,
     setRootFolderName,
+    isOllamaOnline,
   } = useBookmarkContext();
   const [isTypingFinished, setIsTypingFinished] = useState(false);
+
+  if (!isOllamaOnline) {
+    return null;
+  }
 
   const createFolders = () => {
     setIsCreatingFolders(true);

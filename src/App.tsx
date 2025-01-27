@@ -1,6 +1,5 @@
 import "./App.css";
 import { Toaster } from "@/components/ui/sonner";
-import { Separator } from "@/components/ui/separator";
 import { BookmarksSection } from "@/components/BookmarksSection";
 import { SortBookmarksSection } from "@/components/SortBookmarksSection";
 import {
@@ -14,6 +13,17 @@ import { OllamaAccordion } from "@/components/OllamaAccordion";
 import { LlmAccordion } from "@/components/LlmAccordion";
 import { CreateFoldersAccordion } from "@/components/CreateFoldersAccordion";
 import Bookshelf from "@/components/Bookshelf";
+
+function Footer() {
+  return (
+    <footer className="fixed bottom-0 w-full bg-background border-t">
+      <div className="container mx-auto p-4 text-center text-sm text-muted-foreground">
+        <p>© 2024 Bookmark Manager. Made with ♥️</p>
+      </div>
+    </footer>
+  );
+}
+
 function App() {
   return (
     <BookmarkProvider>
@@ -40,8 +50,6 @@ function AppContent() {
             <section>
               <SortBookmarksSection />
             </section>
-
-            <Separator className="my-4" />
           </div>
         </ResizablePanel>
 
@@ -52,11 +60,13 @@ function AppContent() {
           style={{ background: `hsl(var(--sidebar-background))` }}
           className="min-h-screen"
         >
-          <section className="p-4 ">
+          <section className="p-4 overflow-auto">
             <BookmarksSection />
           </section>
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      <Footer />
 
       <Toaster />
     </>

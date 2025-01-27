@@ -110,7 +110,7 @@ export function BookmarksList({
         </TableBody>
       </Table>
 
-      <Pagination>
+      <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem className="cursor-pointer">
             {currentPage > 1 ? (

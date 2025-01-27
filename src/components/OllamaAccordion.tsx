@@ -17,7 +17,7 @@ export function OllamaAccordion() {
   const [ollamaVersion, setOllamaVersion] = useState<string | null>(null);
   const [isOllamaChecked, setIsOllamaChecked] = useState(false);
   const [inputUrl, setInputUrl] = useState(ollamaUrl);
-  const [isValidUrl, setIsValidUrl] = useState(true);
+  const [isValidPort, setIsValidPort] = useState(true);
   const [hasTypingFinished, setHasTypingFinished] = useState(false);
 
   const checkOllamaStatus = useCallback(() => {
@@ -44,20 +44,17 @@ export function OllamaAccordion() {
     return () => clearInterval(interval);
   }, [checkOllamaStatus]);
 
-  const validateUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
+  const validatePort = (port: string) => {
+    const portNumber = parseInt(port, 10);
+    return !isNaN(portNumber) && portNumber >= 1 && portNumber <= 65535;
   };
 
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newUrl = e.target.value;
+  const handlePortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const port = e.target.value;
+    const newUrl = `http://localhost:${port}`;
     setInputUrl(newUrl);
-    setIsValidUrl(validateUrl(newUrl));
-    if (validateUrl(newUrl)) {
+    setIsValidPort(validatePort(port));
+    if (validatePort(port)) {
       setOllamaUrl(newUrl);
     }
   };
@@ -94,21 +91,28 @@ export function OllamaAccordion() {
         <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <label htmlFor="ollama-url" className="text-sm font-medium">
-                Ollama API URL
+              <label htmlFor="ollama-port" className="text-sm font-medium">
+                Ollama URL
               </label>
-              <input
-                id="ollama-url"
-                type="text"
-                value={inputUrl}
-                onChange={handleUrlChange}
-                className={`flex h-9 w-full rounded-md border ${
-                  isValidUrl ? "border-input" : "border-red-500"
-                } bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50`}
-                placeholder="http://localhost:11434"
-              />
-              {!isValidUrl && (
-                <p className="text-sm text-red-500">Please enter a valid URL</p>
+              <div className="flex items-center">
+                <span className="text-sm text-muted-foreground mr-1">
+                  http://localhost:
+                </span>
+                <input
+                  id="ollama-port"
+                  type="text"
+                  value={inputUrl.split(":")[2]}
+                  onChange={handlePortChange}
+                  className={`flex h-9 w-32 rounded-md border ${
+                    isValidPort ? "border-input" : "border-red-500"
+                  } bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50`}
+                  placeholder="11434"
+                />
+              </div>
+              {!isValidPort && (
+                <p className="text-sm text-red-500">
+                  Please enter a valid port number (1-65535)
+                </p>
               )}
             </div>
             {isOllamaOnline ? (

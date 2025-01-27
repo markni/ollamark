@@ -108,55 +108,47 @@ export function SortBookmarksSection() {
   const disabledReason = getDisabledReason();
 
   return (
-    <div className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
-      {sortedBookmarks.length > 0 ? (
-        <>
+    <div className="mb-8 flex flex-col gap-4">
+      {/* Primary action buttons */}
+      <div className="flex justify-center gap-4">
+        <Button
+          onClick={sortBookmarks}
+          disabled={isButtonDisabled}
+          title={disabledReason}
+          className="w-full sm:w-auto"
+        >
+          <ArrowUpDown
+            className={`mr-2 h-4 w-4 ${isSorting ? "animate-spin" : ""}`}
+          />
+          {sortedBookmarks.length > 0 ? "Resort Bookmarks" : "Sort Bookmarks"}
+        </Button>
+        {sortedBookmarks.length > 0 && (
+          <Button
+            className="w-full sm:w-auto"
+            variant="destructive"
+            disabled={isSorting}
+            title={isSorting ? "Please wait while sorting is in progress" : ""}
+          >
+            Confirm Categories
+          </Button>
+        )}
+      </div>
+
+      {/* Setup message - outside of muted box */}
+      {isButtonDisabled && !isSorting && (
+        <p className="text-center">
+          You must complete the 3 steps setup before sorting bookmarks
+        </p>
+      )}
+
+      {/* Content area with muted background - only shown when there are bookmarks */}
+      {sortedBookmarks.length > 0 && (
+        <div className="p-4 border rounded-lg bg-muted">
           <BookmarksList
             sortedBookmarks={sortedBookmarks}
             onCategoryChange={handleCategoryChange}
             onReset={handleReset}
           />
-
-          <div className="flex justify-center gap-4">
-            <Button
-              onClick={sortBookmarks}
-              disabled={isButtonDisabled}
-              title={disabledReason}
-              className="w-full sm:w-auto"
-            >
-              <ArrowUpDown
-                className={`mr-2 h-4 w-4 ${isSorting ? "animate-spin" : ""}`}
-              />
-              Resort Bookmarks
-            </Button>
-            <Button
-              className="w-full sm:w-auto"
-              variant="destructive"
-              disabled={isSorting}
-              title={
-                isSorting ? "Please wait while sorting is in progress" : ""
-              }
-            >
-              Confirm Categories
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div className="flex flex-col justify-center items-center gap-4">
-          <Button
-            onClick={sortBookmarks}
-            disabled={isButtonDisabled}
-            title={disabledReason}
-            className="w-full sm:w-auto"
-          >
-            <ArrowUpDown
-              className={`mr-2 h-4 w-4 ${isSorting ? "animate-spin" : ""}`}
-            />
-            Sort Bookmarks
-          </Button>
-          {isButtonDisabled && !isSorting && (
-            <p>You must complete the 3 steps setup before sorting bookmarks</p>
-          )}
         </div>
       )}
     </div>
