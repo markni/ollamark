@@ -94,6 +94,9 @@ export function LlmAccordion() {
       </CardHeader>
       <CardContent>
         <div className="mb-8 p-4 border rounded-lg flex flex-col gap-4">
+          <label htmlFor="llm-model-select" className="text-sm font-medium">
+            LLM models installed on your system
+          </label>
           <div className="mt-4 flex gap-2">
             <Button
               variant="ghost"
@@ -110,7 +113,10 @@ export function LlmAccordion() {
               value={llmModel || undefined}
               onValueChange={(value) => setLlmModel(value)}
             >
-              <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
+              <SelectTrigger
+                id="llm-model-select"
+                className="focus:ring-0 focus:ring-offset-0"
+              >
                 <SelectValue placeholder="Select a model" />
               </SelectTrigger>
               <SelectContent>

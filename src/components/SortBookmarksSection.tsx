@@ -18,6 +18,7 @@ type BookmarkWithCategory = chrome.bookmarks.BookmarkTreeNode & {
 };
 import { PrepareSortBookmarksResponse } from "@/chrome-scripts/types/responses";
 import TypewriterText from "@/components/TypewriterText";
+import { Progress } from "@/components/ui/progress";
 
 export function SortBookmarksSection() {
   const [isSorting, setIsSorting] = useState(false);
@@ -32,6 +33,7 @@ export function SortBookmarksSection() {
   >([]);
   const { isOllamaOnline, llmModel, rootFolderId, rootFolderName } =
     useBookmarkContext();
+  const [sortingProgress, setSortingProgress] = useState(0);
 
   useEffect(() => {
     chrome.runtime.sendMessage(
@@ -48,6 +50,7 @@ export function SortBookmarksSection() {
     const messageListener = (message: {
       type: string;
       bookmarksSortingInprogress?: BookmarkWithCategory[];
+      progress?: number;
     }) => {
       if (
         message.type === "sortingInProgress" &&
@@ -64,6 +67,9 @@ export function SortBookmarksSection() {
             };
           })
         );
+        if (message.progress) {
+          setSortingProgress(message.progress);
+        }
       }
     };
 
@@ -148,12 +154,10 @@ export function SortBookmarksSection() {
             </div>
           </CardTitle>
           <CardDescription>
-            Using <span className="font-bold">{llmModel}</span> sort your
-            bookmarks into{" "}
-            <span className="font-bold">
-              {rootFolderName} in your bookmark bar
-            </span>
-            ...
+            Currently set to use <span className="font-bold">Ollama</span> +{" "}
+            <span className="font-bold">{llmModel}</span> sort your bookmarks
+            into <span className="font-bold">{rootFolderName}</span> in your
+            bookmark bar ...
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -192,6 +196,12 @@ export function SortBookmarksSection() {
           You must complete the 3 steps setup before sorting bookmarks
         </p>
       )}
+
+      <Progress
+        value={sortingProgress}
+        className="w-full"
+        indicatorClassName="bg-blue-500"
+      />
 
       {/* Content area with muted background - only shown when there are bookmarks */}
       <div className="p-4 border rounded-lg bg-muted">

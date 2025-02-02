@@ -78,8 +78,7 @@ export function CreateFoldersAccordion() {
               className="text-xl font-bold"
               onTypingFinish={() => setIsTypingFinished(true)}
             >
-              Setup categories
-              {rootFolderName ? ` (created folder "${rootFolderName}")` : ""}
+              Setting up categories
             </TypewriterText>
             {isTypingFinished &&
               (rootFolderId ? (

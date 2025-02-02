@@ -36,7 +36,7 @@ export function BookmarksList({
   onReset,
 }: BookmarksListProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 15;
   const { subFolders } = useBookmarkContext();
 
   const getCurrentPageItems = () => {

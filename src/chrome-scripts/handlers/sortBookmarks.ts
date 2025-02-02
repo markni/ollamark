@@ -59,6 +59,7 @@ export const handleSortBookmarks = (
         chrome.runtime.sendMessage({
           type: "sortingInProgress",
           bookmarksSortingInprogress: results,
+          progress: Math.round((i / results.length) * 100),
         });
       }
 
