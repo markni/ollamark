@@ -1,4 +1,4 @@
-import { DEFAULT_SUBFOLDERS } from "@/constants";
+import { DEFAULT_SUBFOLDERS, DEFAULT_ROOT_FOLDER_NAME } from "@/constants";
 import { FolderResponse } from "../types/responses";
 
 export const handleCreateFolders = (
@@ -9,24 +9,28 @@ export const handleCreateFolders = (
   sendResponse: (response: FolderResponse) => void
 ) => {
   const bookmarkBarId = "1";
-  const folderName = message.folderName || "test";
+  const folderName = message.folderName || DEFAULT_ROOT_FOLDER_NAME;
   const subfolders = message.subfolders || DEFAULT_SUBFOLDERS;
 
   chrome.bookmarks.search({ title: folderName }, (results) => {
-    const testFolder = results.find(
+    const existingFolder = results.find(
       (bookmark) => bookmark.parentId === bookmarkBarId
     );
 
-    if (testFolder) {
+    if (existingFolder) {
       console.log(`${folderName} folder already exists`);
-      chrome.bookmarks.move(testFolder.id, { index: 0 }, () => {
+      chrome.bookmarks.move(existingFolder.id, { index: 0 }, () => {
         if (chrome.runtime.lastError) {
           console.error(
             "Failed to move existing folder:",
             chrome.runtime.lastError
           );
         }
-        sendResponse({ success: true, folderId: testFolder.id });
+        sendResponse({
+          success: true,
+          folderId: existingFolder.id,
+          folderName: existingFolder.title,
+        });
       });
       return;
     }

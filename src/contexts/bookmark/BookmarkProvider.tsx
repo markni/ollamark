@@ -33,7 +33,7 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
     if (
       currentStep === 3 &&
       rootFolderId &&
-      prevRootFolderIdRef.current === ""
+      prevRootFolderIdRef.current !== rootFolderId
     ) {
       setCurrentStep(4);
     }

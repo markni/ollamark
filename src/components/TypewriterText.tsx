@@ -4,12 +4,14 @@ interface TypewriterTextProps {
   children: ReactNode; // can be text, <span>, <a>, etc.
   typingSpeed?: number; // ms between typed characters
   onTypingFinish?: () => void; // Add new prop
+  className?: string; // Add new prop for className
 }
 
 export default function TypewriterText({
   children,
   typingSpeed = 20,
   onTypingFinish,
+  className = "", // Add default value
 }: TypewriterTextProps) {
   const [typedHTML, setTypedHTML] = useState("");
   const [isTyping, setIsTyping] = useState(true);
@@ -92,7 +94,10 @@ export default function TypewriterText({
   }, [htmlString, typingSpeed]);
 
   return (
-    <span style={{ display: "inline-block", position: "relative" }}>
+    <span
+      className={className}
+      style={{ display: "inline-block", position: "relative" }}
+    >
       {/* Render the typed HTML so far */}
       <span dangerouslySetInnerHTML={{ __html: typedHTML }} />
 

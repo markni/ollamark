@@ -16,3 +16,5 @@ export const DEFAULT_SUBFOLDERS = [
 ].sort();
 
 export const DEFAULT_OLLAMA_URL = "http://localhost:11434";
+
+export const DEFAULT_ROOT_FOLDER_NAME = "Sorted Bookmarks";
