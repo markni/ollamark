@@ -16,4 +16,6 @@ export const BookmarkContext = createContext<BookmarkContextType>({
   setRootFolderName: () => {},
   ollamaUrl: "",
   setOllamaUrl: () => {},
+  currentStep: 1,
+  setCurrentStep: () => {},
 });

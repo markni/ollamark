@@ -2,13 +2,6 @@ import { useEffect, useCallback, useState } from "react";
 import { Check, X, Bot, RefreshCw } from "lucide-react";
 import { useBookmarkContext } from "@/contexts/bookmark";
 import { Button } from "@/components/ui/button";
-
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  Accordion,
-} from "@/components/ui/accordion";
 import {
   Select,
   SelectTrigger,
@@ -19,7 +12,6 @@ import {
 import TypewriterText from "@/components/TypewriterText";
 
 export function LlmAccordion() {
-  const [accordionValue, setAccordionValue] = useState<string[]>([]);
   const [isLlmChecked, setIsLlmChecked] = useState(false);
   const { llmModel, setLlmModel, isOllamaOnline } = useBookmarkContext();
   const [llmModels, setLlmModels] = useState<string[]>([]);
@@ -50,83 +42,70 @@ export function LlmAccordion() {
   }
 
   return (
-    <Accordion
-      type="multiple"
-      value={llmModel ? accordionValue : ["step-1"]}
-      onValueChange={(value) => {
-        if (llmModel) {
-          setAccordionValue(value);
-        }
-      }}
-    >
-      <AccordionItem value="step-1">
-        <AccordionTrigger>
-          <div className="flex items-center gap-2">
-            <Bot />
-            <TypewriterText onTypingFinish={() => setIsTypingFinished(true)}>
-              2. Select a llm model
-              {llmModel && (
-                <span className="text-muted-foreground">
-                  ({llmModel} selected)
-                </span>
-              )}
-            </TypewriterText>
-
-            {isTypingFinished &&
-              (llmModel ? (
-                <Check className="h-4 w-4 text-green-500 ml-2" />
-              ) : (
-                <X className="h-4 w-4 text-red-500 ml-2" />
-              ))}
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
-          {llmModel ? (
-            <p>You have selected {llmModel} as your llm model.</p>
-          ) : (
-            <p>
-              Pick a model you want to use to sort your bookmarks. If you don't
-              see any listed, make sure you{" "}
-              <a
-                className="text-blue-500 hover:underline"
-                href="https://ollama.com/search"
-                target="_blank"
-              >
-                install a model first.
-              </a>
-            </p>
+    <div className="w-full">
+      <div className="flex items-center gap-2 py-4">
+        <Bot />
+        <TypewriterText onTypingFinish={() => setIsTypingFinished(true)}>
+          Select a llm model
+          {llmModel && (
+            <span className="text-muted-foreground">({llmModel} selected)</span>
           )}
+        </TypewriterText>
 
-          <div className="mt-4 flex gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={checkLlm}
-              title="Refresh LLM models"
-              disabled={isChecking}
+        {isTypingFinished &&
+          (llmModel ? (
+            <Check className="h-4 w-4 text-green-500 ml-2" />
+          ) : (
+            <X className="h-4 w-4 text-red-500 ml-2" />
+          ))}
+      </div>
+
+      <div className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
+        {llmModel ? (
+          <p>You have selected {llmModel} as your llm model.</p>
+        ) : (
+          <p>
+            Pick a model you want to use to sort your bookmarks. If you don't
+            see any listed, make sure you{" "}
+            <a
+              className="text-blue-500 hover:underline"
+              href="https://ollama.com/search"
+              target="_blank"
             >
-              <RefreshCw
-                className={`h-5 w-5 ${isChecking ? "animate-spin" : ""}`}
-              />
-            </Button>
-            <Select
-              value={llmModel || undefined}
-              onValueChange={(value) => setLlmModel(value)}
-            >
-              <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
-                <SelectValue placeholder="Select a model" />
-              </SelectTrigger>
-              <SelectContent>
-                {llmModels.map((model) => (
-                  <SelectItem key={model} value={model}>
-                    {model}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+              install a model first.
+            </a>
+          </p>
+        )}
+
+        <div className="mt-4 flex gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={checkLlm}
+            title="Refresh LLM models"
+            disabled={isChecking}
+          >
+            <RefreshCw
+              className={`h-5 w-5 ${isChecking ? "animate-spin" : ""}`}
+            />
+          </Button>
+          <Select
+            value={llmModel || undefined}
+            onValueChange={(value) => setLlmModel(value)}
+          >
+            <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
+              <SelectValue placeholder="Select a model" />
+            </SelectTrigger>
+            <SelectContent>
+              {llmModels.map((model) => (
+                <SelectItem key={model} value={model}>
+                  {model}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    </div>
   );
 }

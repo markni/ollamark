@@ -13,4 +13,6 @@ export type BookmarkContextType = {
   setOllamaUrl: (url: string) => void;
   rootFolderName: string;
   setRootFolderName: (name: string) => void;
+  currentStep: number;
+  setCurrentStep: (step: number) => void;
 };

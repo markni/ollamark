@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useBookmarkContext } from "@/contexts/bookmark";
 import { SortBookmarksResponse } from "@/chrome-scripts/types/responses";
 import { BookmarksList } from "./BookmarksList";
+import ShinnyButton from "./ShinnyButton";
 
 type BookmarkWithCategory = chrome.bookmarks.BookmarkTreeNode & {
   category?: string;
@@ -108,14 +109,14 @@ export function SortBookmarksSection() {
   const disabledReason = getDisabledReason();
 
   return (
-    <div className="mb-8 flex flex-col gap-4">
+    <div className="mb-8 flex flex-col gap-4 pt-20">
       {/* Primary action buttons */}
       <div className="flex justify-center gap-4">
         <Button
           onClick={sortBookmarks}
           disabled={isButtonDisabled}
           title={disabledReason}
-          className="w-full sm:w-auto"
+          className="w-full sm:w-auto bg-blue-500 text-white scale-150 hover:bg-blue-600 hover:text-white"
         >
           <ArrowUpDown
             className={`mr-2 h-4 w-4 ${isSorting ? "animate-spin" : ""}`}
