@@ -71,18 +71,10 @@ function AppContent() {
             </div>
             <div className=" z-10">
               <div className="p-4 flex flex-col gap-4 bg-muted rounded-l-xl mt-20 h-full shadow-[-20px_0px_20px_-15px_rgba(0,0,0,0.3)]">
-                <div className={currentStep === 1 ? "" : "hidden"}>
-                  <OllamaAccordion />
-                </div>
-                <div className={currentStep === 2 ? "" : "hidden"}>
-                  <LlmAccordion />
-                </div>
-                <div className={currentStep === 3 ? "" : "hidden"}>
-                  <CreateFoldersAccordion />
-                </div>
-                <div className={currentStep === 4 ? "" : "hidden"}>
-                  <SortBookmarksSection />
-                </div>
+                {currentStep === 1 && <OllamaAccordion />}
+                {currentStep === 2 && <LlmAccordion />}
+                {currentStep === 3 && <CreateFoldersAccordion />}
+                {currentStep === 4 && <SortBookmarksSection />}
               </div>
             </div>
           </div>

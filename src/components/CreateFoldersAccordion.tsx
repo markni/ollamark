@@ -8,7 +8,13 @@ import { toast } from "sonner";
 import TypewriterText from "@/components/TypewriterText";
 import { Label } from "@/components/ui/label";
 import { DEFAULT_ROOT_FOLDER_NAME } from "@/constants";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { MESSAGE_ACTIONS } from "@/constants";
 export function CreateFoldersAccordion() {
   const [isCreatingFolders, setIsCreatingFolders] = useState(false);
@@ -65,26 +71,25 @@ export function CreateFoldersAccordion() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center gap-2 py-4">
-          <Folder />
-          <TypewriterText
-            className="text-xl font-bold"
-            onTypingFinish={() => setIsTypingFinished(true)}
-          >
-            Setup categories
-            {rootFolderName ? ` (created folder "${rootFolderName}")` : ""}
-          </TypewriterText>
-          {isTypingFinished &&
-            (rootFolderId ? (
-              <Check className="h-4 w-4 text-green-500 ml-2" />
-            ) : (
-              <X className="h-4 w-4 text-red-500 ml-2" />
-            ))}
-        </div>
-      </CardHeader>
-
-      <CardContent>
-        <div className="mb-8 p-4 border rounded-lg flex flex-col gap-4">
+        <CardTitle>
+          <div className="flex items-center gap-2 py-4">
+            <Folder />
+            <TypewriterText
+              className="text-xl font-bold"
+              onTypingFinish={() => setIsTypingFinished(true)}
+            >
+              Setup categories
+              {rootFolderName ? ` (created folder "${rootFolderName}")` : ""}
+            </TypewriterText>
+            {isTypingFinished &&
+              (rootFolderId ? (
+                <Check className="h-4 w-4 text-green-500 ml-2" />
+              ) : (
+                <X className="h-4 w-4 text-red-500 ml-2" />
+              ))}
+          </div>
+        </CardTitle>
+        <CardDescription>
           {rootFolderId ? (
             <p>You have selected {rootFolderName} as your root folder.</p>
           ) : (
@@ -93,7 +98,11 @@ export function CreateFoldersAccordion() {
               sorted into these categories inside the root folder.
             </p>
           )}
+        </CardDescription>
+      </CardHeader>
 
+      <CardContent>
+        <div className="mb-8 p-4 border rounded-lg flex flex-col gap-4">
           <div className="flex w-full max-w-sm space-x-2 mt-4">
             <div className="grid w-full gap-1.5">
               <Label htmlFor="rootFolderName" className="text-xs">

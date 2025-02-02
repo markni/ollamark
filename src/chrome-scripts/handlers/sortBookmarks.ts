@@ -1,6 +1,7 @@
 import { SortBookmarksResponse } from "../types/responses";
 import loadAllBookmarks from "../lib/loadAllBookmarks";
 import getCategoryFromPage from "../lib/getCategoryFromPage";
+import { MESSAGE_ACTIONS } from "@/constants";
 
 export const handleSortBookmarks = (
   message: { ollamaUrl?: string; subfolders?: string[]; llmModel: string },

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Ollamark",
-  "version": "1.0.1754",
+  "version": "1.0.1818",
   "description": "Ollama Powered AI Bookmark Sortor",
   "permissions": [
     "bookmarks",

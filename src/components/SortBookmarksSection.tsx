@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Sparkles, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useBookmarkContext } from "@/contexts/bookmark";
@@ -16,6 +16,8 @@ import { MESSAGE_ACTIONS } from "@/constants";
 type BookmarkWithCategory = chrome.bookmarks.BookmarkTreeNode & {
   category?: string;
 };
+import { PrepareSortBookmarksResponse } from "@/chrome-scripts/types/responses";
+import TypewriterText from "@/components/TypewriterText";
 
 export function SortBookmarksSection() {
   const [isSorting, setIsSorting] = useState(false);
@@ -25,8 +27,22 @@ export function SortBookmarksSection() {
   const [sortedBookmarks, setSortedBookmarks] = useState<
     BookmarkWithCategory[]
   >([]);
+  const [unsortedBookmarks, setUnsortedBookmarks] = useState<
+    BookmarkWithCategory[]
+  >([]);
   const { isOllamaOnline, llmModel, rootFolderId, rootFolderName } =
     useBookmarkContext();
+
+  useEffect(() => {
+    chrome.runtime.sendMessage(
+      { action: MESSAGE_ACTIONS.PREPARE_SORT_BOOKMARKS },
+      (response: PrepareSortBookmarksResponse) => {
+        if (response.success && response.unsortedBookmarks) {
+          setUnsortedBookmarks(response.unsortedBookmarks || []);
+        }
+      }
+    );
+  }, []);
 
   useEffect(() => {
     const messageListener = (message: {
@@ -100,8 +116,10 @@ export function SortBookmarksSection() {
   };
 
   const handleReset = () => {
-    setSortedBookmarks(originalSortedBookmarks);
-    toast.success("Categories reset to original suggestions");
+    if (sortedBookmarks.length > 0 && originalSortedBookmarks.length > 0) {
+      setSortedBookmarks(originalSortedBookmarks);
+      toast.success("Categories reset to original suggestions");
+    }
   };
 
   const getDisabledReason = () => {
@@ -121,9 +139,21 @@ export function SortBookmarksSection() {
       {/* Primary action buttons */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Sort bookmarks</CardTitle>
+          <CardTitle className="text-xl">
+            <div className="flex gap-2 items-center">
+              <Sparkles />
+              <TypewriterText className="text-xl font-bold">
+                Sort Bookmarks
+              </TypewriterText>
+            </div>
+          </CardTitle>
           <CardDescription>
-            Using {llmModel} sort your bookmarks into {rootFolderName}...{" "}
+            Using <span className="font-bold">{llmModel}</span> sort your
+            bookmarks into{" "}
+            <span className="font-bold">
+              {rootFolderName} in your bookmark bar
+            </span>
+            ...
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -133,24 +163,23 @@ export function SortBookmarksSection() {
               disabled={isButtonDisabled}
               title={disabledReason}
               size="xl"
-              className="w-full sm:w-auto bg-blue-500 text-white  hover:bg-blue-600 hover:text-white"
+              className="w-full sm:w-auto bg-blue-500 text-white  hover:bg-blue-600 hover:text-white min-w-[260px]"
             >
               <ArrowUpDown
-                className={`mr-2 h-4 w-4 ${isSorting ? "animate-spin" : ""}`}
+                className={`mr-2 h-5 w-5 ${isSorting ? "animate-spin" : ""}`}
               />
-              {sortedBookmarks.length > 0
-                ? "Resort Bookmarks"
-                : "Sort Bookmarks"}
+              {sortedBookmarks.length > 0 ? "Resort" : "Start Sorting"}
             </Button>
             <Button
               size="xl"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto min-w-[260px]"
               variant="destructive"
               disabled={isSorting || sortedBookmarks.length === 0}
               title={
                 isSorting ? "Please wait while sorting is in progress" : ""
               }
             >
+              <Save className="mr-2 h-5 w-5" />
               Save Changes
             </Button>
           </div>
@@ -165,15 +194,15 @@ export function SortBookmarksSection() {
       )}
 
       {/* Content area with muted background - only shown when there are bookmarks */}
-      {sortedBookmarks.length > 0 && (
-        <div className="p-4 border rounded-lg bg-muted">
-          <BookmarksList
-            sortedBookmarks={sortedBookmarks}
-            onCategoryChange={handleCategoryChange}
-            onReset={handleReset}
-          />
-        </div>
-      )}
+      <div className="p-4 border rounded-lg bg-muted">
+        <BookmarksList
+          sortedBookmarks={
+            sortedBookmarks.length > 0 ? sortedBookmarks : unsortedBookmarks
+          }
+          onCategoryChange={handleCategoryChange}
+          onReset={handleReset}
+        />
+      </div>
     </div>
   );
 }

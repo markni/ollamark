@@ -3,12 +3,19 @@ import { Check, X } from "lucide-react";
 import { useBookmarkContext } from "@/contexts/bookmark";
 import { SiOllama } from "@icons-pack/react-simple-icons";
 import TypewriterText from "@/components/TypewriterText";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { MESSAGE_ACTIONS } from "@/constants";
 
 export function OllamaAccordion() {
   const { isOllamaOnline, setIsOllamaOnline, ollamaUrl, setOllamaUrl } =
     useBookmarkContext();
+
   const [ollamaVersion, setOllamaVersion] = useState<string | null>(null);
   const [isOllamaChecked, setIsOllamaChecked] = useState(false);
   const [inputUrl, setInputUrl] = useState(ollamaUrl);
@@ -62,26 +69,53 @@ export function OllamaAccordion() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center gap-2 py-4">
-          <SiOllama />
-          <TypewriterText
-            className="text-xl font-bold"
-            onTypingFinish={handleTypingFinish}
-          >
-            Checking ollama availability
-          </TypewriterText>
+        <CardTitle>
+          <div className="flex items-center gap-2 py-4">
+            <SiOllama />
+            <TypewriterText
+              className="text-xl font-bold"
+              onTypingFinish={handleTypingFinish}
+            >
+              Checking ollama availability
+            </TypewriterText>
 
-          {hasTypingFinished &&
-            isOllamaChecked &&
-            (isOllamaOnline ? (
-              <Check className="h-4 w-4 text-green-500 ml-2" />
-            ) : (
-              <X className="h-4 w-4 text-red-500 ml-2" />
-            ))}
-        </div>
+            {hasTypingFinished &&
+              isOllamaChecked &&
+              (isOllamaOnline ? (
+                <Check className="h-4 w-4 text-green-500 ml-2" />
+              ) : (
+                <X className="h-4 w-4 text-red-500 ml-2" />
+              ))}
+          </div>
+        </CardTitle>
+        <CardDescription>
+          {isOllamaOnline ? (
+            <div>
+              Your Ollama v.{ollamaVersion} is running and ready to use!{" "}
+            </div>
+          ) : (
+            <div>
+              Ollama is not running. Please make sure:
+              <ul className="list-disc pl-6 mt-2">
+                <li>
+                  <a
+                    href="https://ollama.com/download"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    Ollama is installed
+                  </a>{" "}
+                  on your system
+                </li>
+                <li>The Ollama app / service is running</li>
+              </ul>
+            </div>
+          )}
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="mb-8 p-4 border rounded-lg bg-muted flex flex-col gap-4">
+        <div className="mb-8 p-4 border rounded-lg flex flex-col gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <label htmlFor="ollama-port" className="text-sm font-medium">
@@ -108,29 +142,6 @@ export function OllamaAccordion() {
                 </p>
               )}
             </div>
-            {isOllamaOnline ? (
-              <div>
-                Your Ollama v.{ollamaVersion} is running and ready to use!{" "}
-              </div>
-            ) : (
-              <div>
-                Ollama is not running. Please make sure:
-                <ul className="list-disc pl-6 mt-2">
-                  <li>
-                    <a
-                      href="https://ollama.com/download"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
-                    >
-                      Ollama is installed
-                    </a>{" "}
-                    on your system
-                  </li>
-                  <li>The Ollama app / service is running</li>
-                </ul>
-              </div>
-            )}
           </div>
         </div>
       </CardContent>
