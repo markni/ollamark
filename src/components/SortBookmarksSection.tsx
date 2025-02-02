@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import { MESSAGE_ACTIONS } from "@/constants";
 type BookmarkWithCategory = chrome.bookmarks.BookmarkTreeNode & {
   category?: string;
 };
@@ -63,10 +63,11 @@ export function SortBookmarksSection() {
     setSortedBookmarks([]);
     setOriginalSortedBookmarks([]);
     chrome.runtime.sendMessage(
-      { action: "sortBookmarks", llmModel },
+      { action: MESSAGE_ACTIONS.SORT_BOOKMARKS, llmModel },
       (response: SortBookmarksResponse) => {
         if (response.success && response.categorizedBookmarks) {
           setOriginalSortedBookmarks(response.categorizedBookmarks || []);
+
           toast.success(
             "Bookmarks pre-sorted successfully, please review the results",
             {

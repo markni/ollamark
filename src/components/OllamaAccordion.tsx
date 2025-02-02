@@ -4,6 +4,7 @@ import { useBookmarkContext } from "@/contexts/bookmark";
 import { SiOllama } from "@icons-pack/react-simple-icons";
 import TypewriterText from "@/components/TypewriterText";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { MESSAGE_ACTIONS } from "@/constants";
 
 export function OllamaAccordion() {
   const { isOllamaOnline, setIsOllamaOnline, ollamaUrl, setOllamaUrl } =
@@ -17,9 +18,10 @@ export function OllamaAccordion() {
   const checkOllamaStatus = useCallback(() => {
     chrome.runtime.sendMessage(
       {
-        action: "checkOllama",
+        action: MESSAGE_ACTIONS.CHECK_OLLAMA,
         url: ollamaUrl,
       },
+
       (response) => {
         setIsOllamaChecked(true);
         setIsOllamaOnline(response.success);

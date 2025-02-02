@@ -9,7 +9,7 @@ import TypewriterText from "@/components/TypewriterText";
 import { Label } from "@/components/ui/label";
 import { DEFAULT_ROOT_FOLDER_NAME } from "@/constants";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-
+import { MESSAGE_ACTIONS } from "@/constants";
 export function CreateFoldersAccordion() {
   const [isCreatingFolders, setIsCreatingFolders] = useState(false);
   const [folderName, setFolderName] = useState(DEFAULT_ROOT_FOLDER_NAME);
@@ -32,7 +32,7 @@ export function CreateFoldersAccordion() {
     setIsCreatingFolders(true);
     chrome.runtime.sendMessage(
       {
-        action: "createFolders",
+        action: MESSAGE_ACTIONS.CREATE_FOLDERS,
         folderName,
         subfolders: subFolders,
       },

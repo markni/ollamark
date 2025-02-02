@@ -19,7 +19,7 @@ function Footer() {
   return (
     <footer className="fixed bottom-0 w-full bg-background border-t z-20">
       <div className="container mx-auto p-4 text-center text-sm text-muted-foreground">
-        <p>© 2024 Bookmark Manager. Made with ♥️</p>
+        <p>© 2024 Mark Ni. Made with 🤖</p>
       </div>
     </footer>
   );

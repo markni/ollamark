@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import TypewriterText from "@/components/TypewriterText";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { MESSAGE_ACTIONS } from "@/constants";
 
 export function LlmAccordion() {
   const [isLlmChecked, setIsLlmChecked] = useState(false);
@@ -21,17 +22,20 @@ export function LlmAccordion() {
 
   const checkLlm = useCallback(() => {
     setIsChecking(true);
-    chrome.runtime.sendMessage({ action: "checkLlm" }, (response) => {
-      setIsLlmChecked(true);
-      setTimeout(() => {
-        setIsChecking(false);
-      }, 500);
-      if (!response.success) {
-        console.log("Ollama is offline:", response.error);
-      } else {
-        setLlmModels(response.llmModels);
+    chrome.runtime.sendMessage(
+      { action: MESSAGE_ACTIONS.CHECK_LLM },
+      (response) => {
+        setIsLlmChecked(true);
+        setTimeout(() => {
+          setIsChecking(false);
+        }, 500);
+        if (!response.success) {
+          console.log("Ollama is offline:", response.error);
+        } else {
+          setLlmModels(response.llmModels);
+        }
       }
-    });
+    );
   }, []);
 
   useEffect(() => {

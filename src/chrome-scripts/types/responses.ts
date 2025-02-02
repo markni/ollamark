@@ -30,3 +30,13 @@ export interface SortBookmarksResponse {
     }
   >;
 }
+
+export interface PrepareSortBookmarksResponse {
+  success: boolean;
+  error?: string;
+  unsortedBookmarks?: Array<
+    chrome.bookmarks.BookmarkTreeNode & {
+      category?: string;
+    }
+  >;
+}
