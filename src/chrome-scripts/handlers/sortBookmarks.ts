@@ -1,23 +1,37 @@
 import { SortBookmarksResponse } from "../types/responses";
 import loadAllBookmarks from "../lib/loadAllBookmarks";
 import getCategoryFromPage from "../lib/getCategoryFromPage";
-import { MESSAGE_ACTIONS } from "@/constants";
+
+// Add this at the top level of the file
+let currentAbortController: AbortController | null = null;
 
 export const handleSortBookmarks = (
   message: { ollamaUrl?: string; subfolders?: string[]; llmModel: string },
   sendResponse: (response: SortBookmarksResponse) => void
 ): boolean => {
+  // If there's an existing sorting operation, abort it
+  if (currentAbortController) {
+    currentAbortController.abort();
+    currentAbortController = null;
+  }
+
+  // Create new abort controller for this operation
+  currentAbortController = new AbortController();
+  const { signal } = currentAbortController;
+
   // Wrap the async logic in an immediately-invoked async function
   (async () => {
     try {
-      const MAX_BOOKMARKS = 9999; // Debug limit
+      const MAX_BOOKMARKS = 3; // Debug limit
       const bookmarks = await loadAllBookmarks();
-      // Pre-fill results with all bookmarks, initially with null categories
       const results: (chrome.bookmarks.BookmarkTreeNode & {
         category?: string;
       })[] = bookmarks.slice(0, MAX_BOOKMARKS);
 
       console.log(`Processing ${results.length} bookmarks...`);
+
+      // Check if aborted
+      if (signal.aborted) throw new Error("Sorting operation was cancelled");
 
       chrome.runtime.sendMessage({
         type: "sortingInProgress",
@@ -25,6 +39,9 @@ export const handleSortBookmarks = (
       });
 
       for (let i = 0; i < results.length; i++) {
+        // Check if aborted at the start of each iteration
+        if (signal.aborted) throw new Error("Sorting operation was cancelled");
+
         const bookmark = results[i];
         if (!bookmark?.url) {
           console.log(`Skipping bookmark ${i + 1}: No URL`);
@@ -64,6 +81,7 @@ export const handleSortBookmarks = (
       }
 
       console.log("Final categorized bookmarks:", results);
+      currentAbortController = null; // Clear the controller on success
       sendResponse({
         success: true,
         categorizedBookmarks: results,
@@ -72,10 +90,18 @@ export const handleSortBookmarks = (
       console.error("Error processing bookmarks:", error);
       const errorMessage =
         error instanceof Error ? error.message : String(error);
+      currentAbortController = null; // Clear the controller on error
       sendResponse({ success: false, error: errorMessage });
     }
   })();
 
   // Return true to indicate we'll send response asynchronously
   return true;
+};
+
+export const abortCurrentSorting = (): void => {
+  if (currentAbortController) {
+    currentAbortController.abort();
+    currentAbortController = null;
+  }
 };

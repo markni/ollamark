@@ -15,6 +15,8 @@ import { LlmAccordion } from "@/components/LlmAccordion";
 import { CreateFoldersAccordion } from "@/components/CreateFoldersAccordion";
 import { StepBlueTab } from "@/components/StepBlueTab";
 // import Bookshelf from "@/components/Bookshelf";
+import React from "react";
+
 function Footer() {
   return (
     <footer className="fixed bottom-0 w-full bg-background border-t z-20">
@@ -26,6 +28,16 @@ function Footer() {
 }
 
 function App() {
+  React.useEffect(() => {
+    // Connect to the background script
+    const port = chrome.runtime.connect({ name: "bookmark-organizer" });
+
+    // Cleanup on unmount
+    return () => {
+      port.disconnect();
+    };
+  }, []);
+
   return (
     <BookmarkProvider>
       <AppContent />
