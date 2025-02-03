@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Ollamark",
-  "version": "1.0.1850",
+  "version": "1.0.1882",
   "description": "Ollama Powered AI Bookmark Sortor",
   "permissions": [
     "bookmarks",
@@ -18,7 +18,6 @@
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "host_permissions": [
-    "http://*/*",
-    "https://*/*"
+    "http://localhost/*"
   ]
 }

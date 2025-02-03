@@ -9,7 +9,7 @@ export const handlePrepareSortBookmarks = (
 
   (async () => {
     try {
-      const MAX_BOOKMARKS = 3; // Debug limit
+      const MAX_BOOKMARKS = 999; // Debug limit
       const bookmarks = await loadAllBookmarks();
       // Pre-fill results with all bookmarks, initially with null categories
       const results: (chrome.bookmarks.BookmarkTreeNode & {

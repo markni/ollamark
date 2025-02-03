@@ -26,6 +26,10 @@ export function BookmarksSection() {
 
   useEffect(() => {
     refreshBookmarks();
+    const interval = setInterval(refreshBookmarks, 5000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, [openFolders]);
 
   return (

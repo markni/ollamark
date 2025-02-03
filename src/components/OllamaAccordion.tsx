@@ -43,8 +43,6 @@ export function OllamaAccordion() {
 
   useEffect(() => {
     checkOllamaStatus();
-    const interval = setInterval(checkOllamaStatus, 5000);
-    return () => clearInterval(interval);
   }, [checkOllamaStatus]);
 
   const validatePort = (port: string) => {

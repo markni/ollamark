@@ -40,3 +40,8 @@ export interface PrepareSortBookmarksResponse {
     }
   >;
 }
+
+export interface ConfirmSortBookmarksResponse {
+  success: boolean;
+  error?: string;
+}

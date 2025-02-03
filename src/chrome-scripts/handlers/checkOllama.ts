@@ -10,11 +10,9 @@ export const handleCheckOllama = (
   fetch(`${apiUrl}/api/version`)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Ollama is online:", data);
       sendResponse({ success: true, version: data.version });
     })
     .catch((error) => {
-      console.log("Ollama is offline or unreachable:", error);
       sendResponse({ success: false, error: error.message });
     });
   return true;

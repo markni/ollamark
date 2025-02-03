@@ -132,8 +132,7 @@ export function CreateFoldersAccordion() {
           </div>
 
           <p className="mt-4">
-            You can also customize the categories your bookmark will be sort
-            into.
+            You can customize the categories your bookmark will be sorted into.
           </p>
           <CategoryConfigurator />
         </div>

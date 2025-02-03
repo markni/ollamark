@@ -22,7 +22,7 @@ export const handleSortBookmarks = (
   // Wrap the async logic in an immediately-invoked async function
   (async () => {
     try {
-      const MAX_BOOKMARKS = 3; // Debug limit
+      const MAX_BOOKMARKS = 9999; // Debug limit
       const bookmarks = await loadAllBookmarks();
       const results: (chrome.bookmarks.BookmarkTreeNode & {
         category?: string;
@@ -76,7 +76,7 @@ export const handleSortBookmarks = (
         chrome.runtime.sendMessage({
           type: "sortingInProgress",
           bookmarksSortingInprogress: results,
-          progress: Math.round((i / results.length) * 100),
+          progress: Math.round(((i + 1) / results.length) * 100),
         });
       }
 

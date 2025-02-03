@@ -1,6 +1,6 @@
 import { useState, ReactNode, useEffect, useRef } from "react";
 import { BookmarkContext } from "./BookmarkContext";
-import { DEFAULT_SUBFOLDERS } from "@/constants";
+import { DEFAULT_SUBFOLDERS, MESSAGE_ACTIONS } from "@/constants";
 
 export function BookmarkProvider({ children }: { children: ReactNode }) {
   const [openFolders, setOpenFolders] = useState<string[]>([]);
@@ -16,8 +16,32 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
   const prevRootFolderIdRef = useRef("");
 
   useEffect(() => {
+    const checkOllamaStatus = () => {
+      chrome.runtime.sendMessage(
+        {
+          action: MESSAGE_ACTIONS.CHECK_OLLAMA,
+          url: ollamaUrl,
+        },
+        (response) => {
+          setIsOllamaOnline(response.success);
+          if (!response.success) {
+            console.log("Ollama is offline:", response.error);
+          }
+        }
+      );
+    };
+
+    checkOllamaStatus();
+    const interval = setInterval(checkOllamaStatus, 5000);
+
+    return () => clearInterval(interval);
+  }, [ollamaUrl]);
+
+  useEffect(() => {
     if (currentStep === 1 && isOllamaOnline && !prevOllamaOnlineRef.current) {
       setCurrentStep(2);
+    } else if (!isOllamaOnline && prevOllamaOnlineRef.current) {
+      setCurrentStep(1);
     }
     prevOllamaOnlineRef.current = isOllamaOnline;
   }, [currentStep, isOllamaOnline]);

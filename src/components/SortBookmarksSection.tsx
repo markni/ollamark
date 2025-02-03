@@ -56,6 +56,7 @@ export function SortBookmarksSection() {
         message.type === "sortingInProgress" &&
         message.bookmarksSortingInprogress
       ) {
+        console.log("Received sorting in progress message", message);
         setSortedBookmarks((prevBookmarks) =>
           message.bookmarksSortingInprogress!.map((newBookmark, index) => {
             const existingBookmark = prevBookmarks[index];
@@ -91,7 +92,7 @@ export function SortBookmarksSection() {
           setOriginalSortedBookmarks(response.categorizedBookmarks || []);
 
           toast.success(
-            "Bookmarks pre-sorted successfully, please review the results",
+            "Bookmarks pre-sorted successfully, please review and save the results",
             {
               position: "bottom-left",
               action: {
@@ -107,6 +108,29 @@ export function SortBookmarksSection() {
         setTimeout(() => {
           setIsSorting(false);
         }, 500);
+      }
+    );
+  };
+
+  const confirmSortBookmarks = () => {
+    console.log("Confirming sort bookmarks", sortedBookmarks);
+    chrome.runtime.sendMessage(
+      {
+        action: MESSAGE_ACTIONS.CONFIRM_SORT_BOOKMARKS,
+
+        categorizedBookmarks: sortedBookmarks,
+        rootFolderId,
+      },
+      (response) => {
+        if (response.success) {
+          toast.success("Bookmarks sorted successfully", {
+            position: "bottom-left",
+            action: {
+              label: "OK",
+              onClick: () => toast.dismiss(),
+            },
+          });
+        }
       }
     );
   };
@@ -157,7 +181,7 @@ export function SortBookmarksSection() {
             Currently set to use <span className="font-bold">Ollama</span> +{" "}
             <span className="font-bold">{llmModel}</span> sort your bookmarks
             into <span className="font-bold">{rootFolderName}</span> in your
-            bookmark bar ...
+            bookmark bar.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -175,6 +199,7 @@ export function SortBookmarksSection() {
               {sortedBookmarks.length > 0 ? "Resort" : "Start Sorting"}
             </Button>
             <Button
+              onClick={confirmSortBookmarks}
               size="xl"
               className="w-full sm:w-auto min-w-[260px]"
               variant="destructive"
