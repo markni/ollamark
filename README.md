@@ -7,9 +7,15 @@ Ollamark is a Chrome extension that helps you automatically organize your bookma
 - 🤖 AI-powered bookmark categorization
 - 🏠 Works with your local Ollama instance
 - 🔄 Automatic bookmark sorting
-- 📁 Smart folder creation
 - 🎯 Custom category management
 - 🔒 Privacy-focused (processes everything locally)
+
+## Planned Features
+
+- 🔍 Quick search for bookmarks
+- 📁 Smart categories creation
+- 🔄 Duplicate bookmark detection
+- 🔗 Broken link detection
 
 ## Prerequisites
 
@@ -38,34 +44,13 @@ npm install
 npm run build
 ```
 
+The build will re-build for file changes, no live reload for now, developer will need to reload manually. Any changes made to background script will need a refresh in chrome://extensions/ page.
+
 4. Load the extension in Chrome:
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" in the top right
    - Click "Load unpacked"
    - Select the `dist` directory from your build
-
-## Development
-
-- Start development server:
-
-```
-npm run dev
-```
-
-- Lint your code:
-
-```
-npm run lint
-```
-
-## Tech Stack
-
-- React 18
-- TypeScript
-- Vite
-- Tailwind CSS
-- Radix UI Components
-- Chrome Extensions API
 
 ## Contributing
 
