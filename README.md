@@ -63,4 +63,4 @@ MIT License
 ## Acknowledgments
 
 - [Ollama](https://ollama.ai/) for providing the local AI capabilities
-- [Radix UI](https://www.radix-ui.com/) for the UI components
+- [Shadcn](https://ui.shadcn.com/) for the UI components
