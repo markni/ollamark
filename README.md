@@ -1,4 +1,4 @@
-# Ollamark
+# <img src="./public/ollamark-logo.png" width="32" alt="Ollamark Logo"> Ollamark
 
 Ollamark is a Chrome extension that helps you automatically organize your bookmarks into meaningful categories using your local Ollama instance. It leverages AI to analyze and sort your bookmarks, making them easier to manage and find.
 

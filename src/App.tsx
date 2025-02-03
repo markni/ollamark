@@ -21,7 +21,27 @@ function Footer() {
   return (
     <footer className="fixed bottom-0 w-full bg-background border-t z-20">
       <div className="container mx-auto p-4 text-center text-sm text-muted-foreground">
-        <p>© 2024 Mark Ni. Made with 🤖</p>
+        <p>
+          Love Ollamark?{" "}
+          <a
+            href="https://github.com/markni/ollamark"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:underline text-blue-500"
+          >
+            Star us on GitHub
+          </a>
+          ! Built with 🤖 and open-sourced under the{" "}
+          <a
+            href="https://opensource.org/licenses/MIT"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:underline text-blue-500"
+          >
+            MIT license
+          </a>
+          .
+        </p>
       </div>
     </footer>
   );
