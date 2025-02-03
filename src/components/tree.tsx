@@ -25,13 +25,12 @@ function TreeView({
   );
 
   /**
-   * Recursively checks if the provided node or any of its descendants
-   * is in the openFolders set.
+   * Only checks if the current node is in the openFolders set.
+   * No longer recursively checks children.
    */
   const isNodeOpen = React.useCallback(
-    function isNodeOpen(node: chrome.bookmarks.BookmarkTreeNode): boolean {
-      if (openFoldersSet.has(node.id)) return true;
-      return node.children?.some(isNodeOpen) ?? false;
+    (node: chrome.bookmarks.BookmarkTreeNode): boolean => {
+      return openFoldersSet.has(node.id);
     },
     [openFoldersSet]
   );
@@ -39,7 +38,12 @@ function TreeView({
   return (
     <ul className="space-y-1">
       {items.map((item) => (
-        <TreeItem key={item.id} item={item} isNodeOpen={isNodeOpen} />
+        <TreeItem
+          key={item.id}
+          item={item}
+          isNodeOpen={isNodeOpen}
+          defaultOpen={isNodeOpen(item)} // Pass initial open state
+        />
       ))}
     </ul>
   );
@@ -48,16 +52,21 @@ function TreeView({
 function TreeItem({
   item,
   isNodeOpen,
+  defaultOpen, // Add defaultOpen prop
 }: {
   item: chrome.bookmarks.BookmarkTreeNode;
   isNodeOpen: (node: chrome.bookmarks.BookmarkTreeNode) => boolean;
+  defaultOpen: boolean;
 }) {
-  // Initialize state based on whether this node (or a descendant) is open.
-  const [isOpen, setIsOpen] = React.useState(() => isNodeOpen(item));
+  // Initialize state based on defaultOpen prop
+  const [isOpen, setIsOpen] = React.useState(defaultOpen);
 
-  // Update whenever openFolders change.
+  // Only update when the direct node's open state changes in openFolders
   React.useEffect(() => {
-    setIsOpen(isNodeOpen(item));
+    const newIsOpen = isNodeOpen(item);
+    if (newIsOpen) {
+      setIsOpen(true);
+    }
   }, [isNodeOpen, item]);
 
   const isFolder = !!item.children;
@@ -86,7 +95,12 @@ function TreeItem({
         {isOpen && item.children && item.children.length > 0 && (
           <ul className="ml-6 mt-1 space-y-1">
             {item.children.map((child) => (
-              <TreeItem key={child.id} item={child} isNodeOpen={isNodeOpen} />
+              <TreeItem
+                key={child.id}
+                item={child}
+                isNodeOpen={isNodeOpen}
+                defaultOpen={isNodeOpen(child)}
+              />
             ))}
           </ul>
         )}
