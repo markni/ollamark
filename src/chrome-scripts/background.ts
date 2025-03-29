@@ -10,6 +10,7 @@ import {
 } from "./handlers/sortBookmarks";
 import { handlePrepareSortBookmarks } from "./handlers/prepareSortBookmarks";
 import { handleConfirmSortBookmarks } from "./handlers/confirmSortBookmarks";
+import { handleDebugResetBookmarks } from "./handlers/debugResetBookmarks";
 import { setupHeaderRules } from "./lib/setupHeaderRules";
 import { MESSAGE_ACTIONS } from "../constants";
 
@@ -64,6 +65,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       return handlePrepareSortBookmarks(message, sendResponse);
     case MESSAGE_ACTIONS.CONFIRM_SORT_BOOKMARKS:
       return handleConfirmSortBookmarks(message, sendResponse);
+    case MESSAGE_ACTIONS.DEBUG_RESET_BOOKMARKS:
+      return handleDebugResetBookmarks(message, sendResponse);
     default:
       console.warn("Unknown message action:", message.action);
       return false;

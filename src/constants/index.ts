@@ -27,4 +27,5 @@ export const MESSAGE_ACTIONS = {
   SORT_BOOKMARKS: "sortBookmarks",
   PREPARE_SORT_BOOKMARKS: "prepareSortBookmarks",
   CONFIRM_SORT_BOOKMARKS: "confirmSortBookmarks",
+  DEBUG_RESET_BOOKMARKS: "debugResetBookmarks",
 } as const;

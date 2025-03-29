@@ -9,6 +9,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { BookmarkProvider, useBookmarkContext } from "@/contexts/bookmark";
+import { MESSAGE_ACTIONS } from "@/constants";
 
 import { OllamaAccordion } from "@/components/OllamaAccordion";
 import { LlmAccordion } from "@/components/LlmAccordion";
@@ -16,8 +17,17 @@ import { CreateFoldersAccordion } from "@/components/CreateFoldersAccordion";
 import { StepBlueTab } from "@/components/StepBlueTab";
 // import Bookshelf from "@/components/Bookshelf";
 import React from "react";
-
+import llamaImage from "@/assets/llama.png";
 function Footer() {
+  const handleDebugReset = () => {
+    chrome.runtime.sendMessage(
+      { action: MESSAGE_ACTIONS.DEBUG_RESET_BOOKMARKS },
+      (response) => {
+        console.log("Debug reset response:", response);
+      }
+    );
+  };
+
   return (
     <footer className="fixed bottom-0 w-full bg-background border-t z-20">
       <div className="container mx-auto p-4 text-center text-sm text-muted-foreground">
@@ -42,6 +52,16 @@ function Footer() {
           </a>
           .
         </p>
+        {import.meta.env.MODE === "development" && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDebugReset}
+            className="mt-2"
+          >
+            Debug: Reset Bookmarks
+          </Button>
+        )}
       </div>
     </footer>
   );
@@ -107,6 +127,13 @@ function AppContent() {
                 {currentStep === 2 && <LlmAccordion />}
                 {currentStep === 3 && <CreateFoldersAccordion />}
                 {currentStep === 4 && <SortBookmarksSection />}
+                <div className="flex-1 flex items-end justify-center mb-40">
+                  <img
+                    src={llamaImage}
+                    alt="Llama"
+                    className="max-w-[800px] w-full hidden"
+                  />
+                </div>
               </div>
             </div>
           </div>

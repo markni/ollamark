@@ -3,13 +3,13 @@
   "displayName": "Ollamark",
   "description": "Ollama Powered AI Bookmark Sortor",
   "private": false,
-  "version": "1.0.1897",
+  "version": "1.0.2018",
   "type": "module",
   "license": "MIT",
   "author": "Mark Ni",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build --watch",
+    "dev": "tsc -b && vite build --watch --mode development",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
